@@ -1,0 +1,578 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.register-page {
+  min-height: 100vh;
+  background: #0a0a0a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+}
+
+.register-container {
+  max-width: 1200px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: #0a0a0a;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.register-left {
+  padding: 48px 40px;
+  background: #0a0a0a;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.register-left::-webkit-scrollbar {
+  width: 4px;
+}
+
+.register-left::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.register-left::-webkit-scrollbar-thumb {
+  background: rgba(224, 138, 14, 0.3);
+  border-radius: 2px;
+}
+
+.register-header {
+  margin-bottom: 28px;
+}
+
+.register-brand {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.5px;
+  margin-bottom: 8px;
+}
+
+.brand-suffix {
+  font-weight: 300;
+  color: #e08a0e;
+}
+
+.register-subtitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-top: 12px;
+}
+
+.register-description {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 4px;
+}
+
+.role-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.role-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 2px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.role-btn.active {
+  background: rgba(224, 138, 14, 0.1);
+  border-color: #e08a0e;
+  box-shadow: 0 0 20px rgba(224, 138, 14, 0.05);
+}
+
+.role-btn:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.role-icon {
+  font-size: 1.8rem;
+  margin-bottom: 6px;
+}
+
+.role-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.role-desc {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 2px;
+}
+
+.role-hint {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.4);
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.form-input {
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  outline: none;
+  width: 100%;
+}
+
+.form-input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.form-input:focus {
+  border-color: #e08a0e;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 3px rgba(224, 138, 14, 0.1);
+}
+
+.form-input.error {
+  border-color: #ff4757;
+}
+
+.form-input.error:focus {
+  box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.1);
+}
+
+.form-input select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='rgba(255,255,255,0.3)' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  cursor: pointer;
+}
+
+.form-input select option {
+  background: #1a1a1a;
+  color: #ffffff;
+}
+
+.error-message {
+  font-size: 0.75rem;
+  color: #ff4757;
+  margin-top: 2px;
+}
+
+.register-btn {
+  padding: 14px;
+  background: linear-gradient(135deg, #e08a0e, #c47a0c);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 8px;
+  box-shadow: 0 4px 20px rgba(224, 138, 14, 0.3);
+}
+
+.register-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(224, 138, 14, 0.4);
+}
+
+.register-btn:active {
+  transform: translateY(0);
+}
+
+.status-message {
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.status-message.success {
+  background: rgba(46, 204, 113, 0.15);
+  color: #2ecc71;
+  border: 1px solid rgba(46, 204, 113, 0.24);
+}
+
+.status-message.error {
+  background: rgba(255, 71, 87, 0.15);
+  color: #ff6b7a;
+  border: 1px solid rgba(255, 71, 87, 0.24);
+}
+
+.register-footer {
+  margin-top: 24px;
+  text-align: center;
+}
+
+.signin-text {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+}
+
+.signin-link {
+  background: none;
+  border: none;
+  color: #e08a0e;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  padding: 0;
+}
+
+.signin-link:hover {
+  color: #c47a0c;
+  text-decoration: underline;
+}
+
+.register-right {
+  background: #0f0f0f;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.register-image-container {
+  flex: 1;
+  overflow: hidden;
+  min-height: 300px;
+}
+
+.register-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.register-benefits {
+  padding: 32px 40px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.benefits-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+.benefits-desc {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.6;
+}
+
+@media (max-width: 1024px) {
+  .register-container {
+    grid-template-columns: 1fr;
+    max-width: 600px;
+  }
+
+  .register-left {
+    padding: 32px 24px;
+    max-height: none;
+    overflow-y: visible;
+  }
+
+  .register-right {
+    border-left: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .register-image-container {
+    min-height: 200px;
+  }
+
+  .register-benefits {
+    padding: 24px 32px;
+  }
+
+  .register-brand {
+    font-size: 1.6rem;
+  }
+
+  .register-subtitle {
+    font-size: 1.3rem;
+  }
+
+  .role-tabs {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .register-page {
+    padding: 16px 12px;
+  }
+
+  .register-container {
+    border-radius: 16px;
+  }
+
+  .register-left {
+    padding: 24px 16px;
+  }
+
+  .register-brand {
+    font-size: 1.4rem;
+  }
+
+  .register-subtitle {
+    font-size: 1.2rem;
+  }
+
+  .register-description {
+    font-size: 0.85rem;
+  }
+
+  .role-tabs {
+    gap: 8px;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .role-btn {
+    padding: 12px 8px;
+  }
+
+  .role-icon {
+    font-size: 1.5rem;
+  }
+
+  .role-label {
+    font-size: 0.8rem;
+  }
+
+  .role-desc {
+    font-size: 0.7rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .form-input {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+
+  .register-btn {
+    padding: 12px;
+    font-size: 0.95rem;
+  }
+
+  .register-benefits {
+    padding: 20px 24px;
+  }
+
+  .benefits-title {
+    font-size: 1rem;
+  }
+
+  .benefits-desc {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .role-tabs {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .role-btn {
+    flex-direction: row;
+    gap: 12px;
+    padding: 12px 16px;
+  }
+
+  .role-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0;
+  }
+
+  .role-desc {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-page {
+    padding: 8px 4px;
+  }
+
+  .register-container {
+    border-radius: 12px;
+  }
+
+  .register-left {
+    padding: 20px 12px;
+  }
+
+  .register-brand {
+    font-size: 1.2rem;
+  }
+
+  .register-subtitle {
+    font-size: 1rem;
+  }
+
+  .register-description {
+    font-size: 0.8rem;
+  }
+
+  .role-btn {
+    padding: 10px 12px;
+  }
+
+  .role-icon {
+    font-size: 1.2rem;
+  }
+
+  .role-label {
+    font-size: 0.8rem;
+  }
+
+  .role-desc {
+    font-size: 0.7rem;
+  }
+
+  .role-hint {
+    font-size: 0.75rem;
+    padding: 6px;
+  }
+
+  .form-label {
+    font-size: 0.75rem;
+  }
+
+  .form-input {
+    padding: 8px 10px;
+    font-size: 0.8rem;
+    border-radius: 6px;
+  }
+
+  .error-message {
+    font-size: 0.65rem;
+  }
+
+  .register-btn {
+    padding: 10px;
+    font-size: 0.85rem;
+    border-radius: 8px;
+  }
+
+  .signin-text {
+    font-size: 0.8rem;
+  }
+
+  .signin-link {
+    font-size: 0.8rem;
+  }
+
+  .register-benefits {
+    padding: 16px;
+  }
+
+  .benefits-title {
+    font-size: 0.9rem;
+  }
+
+  .benefits-desc {
+    font-size: 0.8rem;
+  }
+
+  .register-image-container {
+    min-height: 150px;
+  }
+}
+
+@media (max-width: 360px) {
+  .register-left {
+    padding: 16px 10px;
+  }
+
+  .register-brand {
+    font-size: 1rem;
+  }
+
+  .register-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .role-btn {
+    padding: 8px 10px;
+  }
+
+  .role-icon {
+    font-size: 1rem;
+  }
+
+  .role-label {
+    font-size: 0.7rem;
+  }
+
+  .role-desc {
+    font-size: 0.6rem;
+  }
+
+  .form-input {
+    font-size: 0.75rem;
+    padding: 6px 8px;
+  }
+
+  .register-btn {
+    font-size: 0.8rem;
+    padding: 8px;
+  }
+}

@@ -1,0 +1,110 @@
+:root {
+  --app-bg: #0a0a0a;
+  --surface: rgba(255, 255, 255, 0.04);
+  --surface-soft: rgba(255, 255, 255, 0.04);
+  --surface-strong: rgba(255, 255, 255, 0.08);
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-muted: rgba(255, 255, 255, 0.45);
+  --border: rgba(255, 255, 255, 0.08);
+  --shadow: rgba(0, 0, 0, 0.25);
+  --surface-rgb: 255, 255, 255;
+  --text-primary-rgb: 255, 255, 255;
+  --border-rgb: 255, 255, 255;
+  --brand-orange: #ff5722;
+  --brand-orange-dark: #c47a0c;
+  --brand-gradient: linear-gradient(135deg, #ff5722, var(--brand-orange-dark));
+  --text-on-brand: #ffffff;
+
+  --page-bg: var(--app-bg);
+  --card-bg: var(--surface);
+  --card-soft: var(--surface-soft);
+  --card-strong: var(--surface-strong);
+  --header-scrolled-bg: rgba(10, 10, 10, 0.95);
+  --button-outline-bg: rgba(255, 255, 255, 0.08);
+  --button-outline-text: #ffffff;
+  --hero-overlay: rgba(10, 10, 10, 0.75);
+  --hero-text: #ffffff;
+  --hero-description: rgba(255, 255, 255, 0.85);
+  --footer-bg: #0b111e;
+  --footer-border: rgba(255, 255, 255, 0.08);
+  --footer-text: rgba(255, 255, 255, 0.78);
+  --footer-muted: rgba(255, 255, 255, 0.6);
+}
+
+html[data-theme='light'] {
+  --app-bg: #f5f7fb;
+  --surface: #ffffff;
+  --surface-soft: rgba(17, 24, 39, 0.03);
+  --surface-strong: #f0f3fa;
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --text-muted: #6b7280;
+  --border: rgba(17, 24, 39, 0.08);
+  --shadow: rgba(15, 23, 42, 0.08);
+  --surface-rgb: 255, 255, 255;
+  --text-primary-rgb: 17, 24, 39;
+  --border-rgb: 17, 24, 39;
+  --brand-orange: #ff5722;
+  --brand-orange-dark: #c47a0c;
+  --brand-gradient: linear-gradient(135deg, #ff5722, var(--brand-orange-dark));
+
+  --page-bg: #f5f7fb;
+  --card-bg: #ffffff;
+  --card-soft: rgba(17, 24, 39, 0.03);
+  --card-strong: #f0f3fa;
+  --header-scrolled-bg: rgba(255, 255, 255, 0.95);
+  --button-outline-bg: rgba(17, 24, 39, 0.06);
+  --button-outline-text: #111827;
+  --hero-overlay: rgba(255, 255, 255, 0.78);
+  --hero-text: #111827;
+  --hero-description: rgba(17, 24, 39, 0.85);
+  --footer-bg: #ffffff;
+  --footer-border: rgba(17, 24, 39, 0.08);
+  --footer-text: rgba(17, 24, 39, 0.85);
+  --footer-muted: rgba(17, 24, 39, 0.55);
+}
+
+html[data-theme='dark'] {
+  --app-bg: #0a0a0a;
+  --surface: rgba(255, 255, 255, 0.04);
+  --surface-soft: rgba(255, 255, 255, 0.04);
+  --surface-strong: rgba(255, 255, 255, 0.08);
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-muted: rgba(255, 255, 255, 0.45);
+  --border: rgba(255, 255, 255, 0.08);
+  --shadow: rgba(0, 0, 0, 0.25);
+  --surface-rgb: 255, 255, 255;
+  --text-primary-rgb: 255, 255, 255;
+  --border-rgb: 255, 255, 255;
+  --brand-orange: #ff5722;
+  --brand-orange-dark: #c47a0c;
+  --brand-gradient: linear-gradient(135deg, #ff5722, var(--brand-orange-dark));
+
+  --page-bg: #0a0a0a;
+  --card-bg: rgba(255, 255, 255, 0.04);
+  --card-soft: rgba(255, 255, 255, 0.04);
+  --card-strong: rgba(255, 255, 255, 0.08);
+  --header-scrolled-bg: rgba(10, 10, 10, 0.95);
+  --button-outline-bg: rgba(255, 255, 255, 0.08);
+  --button-outline-text: #ffffff;
+  --hero-overlay: rgba(10, 10, 10, 0.75);
+  --hero-text: #ffffff;
+  --hero-description: rgba(255, 255, 255, 0.85);
+  --footer-bg: #0b111e;
+  --footer-border: rgba(255, 255, 255, 0.08);
+  --footer-text: rgba(255, 255, 255, 0.78);
+  --footer-muted: rgba(255, 255, 255, 0.6);
+}
+
+html, body {
+  min-height: 100%;
+  margin: 0;
+  background: var(--app-bg);
+  color: var(--text-primary);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}

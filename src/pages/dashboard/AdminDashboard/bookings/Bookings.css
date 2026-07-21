@@ -1,0 +1,213 @@
+
+.bookings-page {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.bookings-tabs {
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid rgba(var(--border-rgb), 0.06);
+  padding-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.bookings-tabs .tab-btn {
+  padding: 8px 20px;
+  background: none;
+  border: none;
+  color: rgba(var(--text-primary-rgb), 0.4);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 6px;
+}
+
+.bookings-tabs .tab-btn.active {
+  color: #e08a0e;
+  background: rgba(224, 138, 14, 0.08);
+}
+
+.bookings-tabs .tab-btn:hover:not(.active) {
+  color: rgba(var(--text-primary-rgb), 0.7);
+  background: rgba(var(--surface-rgb), 0.05);
+}
+
+.bookings-table-wrapper {
+  background: rgba(var(--surface-rgb), 0.02);
+  border: 1px solid rgba(var(--border-rgb), 0.06);
+  border-radius: 16px;
+  overflow: visible; /* allow inner table to scroll horizontally */
+}
+
+/* Filter bar: lay filters out horizontally */
+.bookings-filters {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 12px 16px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid rgba(var(--border-rgb), 0.04);
+}
+
+.bookings-filters .filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 160px;
+}
+
+.bookings-filters .search-group {
+  flex: 1 1 320px;
+  min-width: 200px;
+}
+
+.bookings-filters label {
+  font-size: 0.8rem;
+  color: rgba(var(--text-primary-rgb), 0.6);
+}
+
+.bookings-filters select,
+.bookings-filters input[type="search"] {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(var(--border-rgb), 0.06);
+  background: rgba(var(--surface-rgb), 0.02);
+}
+
+.bookings-table-scroll {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.bookings-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px; /* ensures horizontal scrollbar on small screens */
+}
+
+.bookings-table thead th {
+  padding: 12px 20px;
+  text-align: left;
+  background: rgba(var(--surface-rgb), 0.03);
+  color: rgba(var(--text-primary-rgb), 0.5);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  border-bottom: 1px solid rgba(var(--border-rgb), 0.06);
+  white-space: nowrap;
+}
+
+.bookings-table tbody td {
+  padding: 12px 20px;
+  border-bottom: 1px solid rgba(var(--border-rgb), 0.03);
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bookings-table tbody tr:nth-child(even) {
+  background: rgba(var(--surface-rgb), 0.01);
+}
+
+.status-pill {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.bookings-table select {
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(var(--border-rgb), 0.06);
+  background: rgba(var(--surface-rgb), 0.02);
+}
+
+.assign-btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #e08a0e;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.assign-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 40px 20px;
+}
+
+.empty-icon {
+  font-size: 3rem;
+}
+
+.empty-text {
+  font-size: 1rem;
+  color: rgba(var(--text-primary-rgb), 0.5);
+  font-weight: 500;
+}
+
+.empty-subtext {
+  font-size: 0.85rem;
+  color: rgba(var(--text-primary-rgb), 0.3);
+}
+
+@media (max-width: 1024px) {
+  /* Slightly reduce type size for tablet widths */
+  .bookings-table thead th,
+  .bookings-table tbody td {
+    font-size: 0.72rem;
+    padding: 10px 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .bookings-tabs {
+    gap: 4px;
+  }
+
+  .bookings-tabs .tab-btn {
+    padding: 6px 14px;
+    font-size: 0.75rem;
+  }
+
+  .bookings-table thead th {
+    padding: 10px 12px;
+    font-size: 0.72rem;
+  }
+
+  .bookings-table tbody td {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+  }
+
+  /* keep horizontal scrolling smooth */
+  .bookings-table-scroll {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .empty-state {
+    padding: 30px 16px;
+  }
+
+  .empty-icon {
+    font-size: 2.5rem;
+  }
+}
+

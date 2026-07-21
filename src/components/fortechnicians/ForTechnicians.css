@@ -1,0 +1,377 @@
+/* ForTechnicians.css */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.for-technicians {
+  position: relative;
+  padding: 80px 0;
+  background: #0a0a0a;
+  overflow: hidden;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+
+.technicians-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('../../assets/images/TechnicianImage.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.15;
+  z-index: 0;
+}
+
+.technicians-container {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.technicians-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.technicians-title {
+  font-size: 3.8rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+}
+
+.technicians-title .highlight {
+  background: linear-gradient(135deg, #e08a0e, #c47a0c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.technicians-description {
+  font-size: 1.15rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.7;
+  max-width: 540px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.technicians-actions {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.btn-apply {
+  padding: 16px 40px;
+  background: linear-gradient(135deg, #e08a0e, #c47a0c);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(224, 138, 14, 0.35);
+}
+
+.btn-apply:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(224, 138, 14, 0.5);
+}
+
+.btn-apply:active {
+  transform: translateY(0);
+}
+
+.login-link {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.login-btn {
+  background: none;
+  border: none;
+  color: #e08a0e;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  padding: 0;
+  font-size: 0.95rem;
+}
+
+.login-btn:hover {
+  color: #c47a0c;
+  text-decoration: underline;
+}
+
+.technicians-contact {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  flex-wrap: wrap;
+}
+
+.contact-label {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.contact-email,
+.contact-phone {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+
+.contact-email:hover,
+.contact-phone:hover {
+  color: #e08a0e;
+}
+
+.contact-divider {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.technicians-illustration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.technicians-video-container {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  position: relative;
+  cursor: pointer;
+  aspect-ratio: 16/9;
+  background: #0a0a0a;
+}
+
+.technicians-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.video-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.play-button {
+  width: 70px;
+  height: 70px;
+  background: rgba(224, 138, 14, 0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: #ffffff;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 40px rgba(224, 138, 14, 0.4);
+}
+
+.technicians-video-container:hover .play-button {
+  transform: scale(1.1);
+  background: #e08a0e;
+  box-shadow: 0 0 60px rgba(224, 138, 14, 0.6);
+}
+
+@media (max-width: 1024px) {
+  .technicians-container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    text-align: center;
+  }
+
+  .technicians-title {
+    font-size: 3rem;
+  }
+
+  .technicians-description {
+    max-width: 100%;
+  }
+
+  .technicians-actions {
+    justify-content: center;
+  }
+
+  .technicians-contact {
+    justify-content: center;
+  }
+
+  .technicians-video-container {
+    max-width: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .for-technicians {
+    padding: 60px 0;
+  }
+
+  .technicians-title {
+    font-size: 2.5rem;
+  }
+
+  .technicians-description {
+    font-size: 1rem;
+  }
+
+  .technicians-actions {
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+  }
+
+  .btn-apply {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 24px;
+    font-size: 1rem;
+  }
+
+  .technicians-contact {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .contact-divider {
+    display: none;
+  }
+
+  .technicians-video-container {
+    max-width: 300px;
+  }
+
+  .play-button {
+    width: 60px;
+    height: 60px;
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .for-technicians {
+    padding: 40px 0;
+  }
+
+  .technicians-container {
+    padding: 0 16px;
+  }
+
+  .technicians-title {
+    font-size: 2rem;
+  }
+
+  .technicians-description {
+    font-size: 0.9rem;
+  }
+
+  .btn-apply {
+    font-size: 0.9rem;
+    padding: 12px 20px;
+  }
+
+  .login-link {
+    font-size: 0.85rem;
+  }
+
+  .login-btn {
+    font-size: 0.85rem;
+  }
+
+  .contact-email,
+  .contact-phone {
+    font-size: 0.8rem;
+  }
+
+  .technicians-video-container {
+    max-width: 250px;
+    border-radius: 16px;
+  }
+
+  .play-button {
+    width: 50px;
+    height: 50px;
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .technicians-video-container {
+    max-width: 200px;
+  }
+
+  .play-button {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+}
+
+@media (min-width: 1400px) {
+  .technicians-container {
+    max-width: 1320px;
+    padding: 0 40px;
+  }
+
+  .technicians-title {
+    font-size: 4.5rem;
+  }
+
+  .technicians-description {
+    font-size: 1.3rem;
+    max-width: 600px;
+  }
+
+  .btn-apply {
+    font-size: 1.1rem;
+    padding: 18px 48px;
+  }
+
+  .technicians-video-container {
+    max-width: 600px;
+  }
+}

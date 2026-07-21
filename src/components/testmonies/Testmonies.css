@@ -1,0 +1,260 @@
+.testimonials {
+  padding: 80px 0 60px;
+  background: #f8f9fa;
+  position: relative;
+  overflow: hidden;
+}
+
+.testimonials-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.testimonials-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.testimonials-badge {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #f5a623;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.testimonials-title {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  letter-spacing: -1px;
+  margin: 0;
+}
+
+.testimonials-scroll {
+  overflow: hidden;
+  cursor: grab;
+  position: relative;
+  margin: 0 -12px;
+  padding: 12px;
+  user-select: none;
+}
+
+.testimonials-scroll:active {
+  cursor: grabbing;
+}
+
+.testimonials-track {
+  display: flex;
+  gap: 24px;
+  width: max-content;
+  animation: none;
+}
+
+.testimonial-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 28px 24px;
+  min-width: 320px;
+  max-width: 360px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+  border-color: rgba(245, 166, 35, 0.15);
+}
+
+.card-rating {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.star {
+  font-size: 1.2rem;
+  color: #d1d5db;
+  transition: color 0.3s ease;
+}
+
+.star.filled {
+  color: #f5a623;
+}
+
+.star.empty {
+  color: #e5e7eb;
+}
+
+.card-text {
+  font-size: 0.95rem;
+  color: rgba(26, 26, 26, 0.8);
+  line-height: 1.7;
+  margin-bottom: 20px;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-author {
+  border-top: 1px solid rgba(0, 0, 0, 0.04);
+  padding-top: 16px;
+}
+
+.author-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 4px 0;
+}
+
+.author-title {
+  font-size: 0.85rem;
+  color: rgba(26, 26, 26, 0.5);
+}
+
+.testimonials-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.scroll-indicator {
+  display: flex;
+  gap: 8px;
+}
+
+.indicator-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.indicator-dot.active {
+  background: #f5a623;
+  width: 24px;
+  border-radius: 4px;
+}
+
+.scroll-hint {
+  font-size: 0.8rem;
+  color: rgba(26, 26, 26, 0.3);
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+@media (max-width: 1024px) {
+  .testimonial-card {
+    min-width: 280px;
+    max-width: 320px;
+    padding: 24px 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .testimonials {
+    padding: 60px 0 40px;
+  }
+
+  .testimonials-header {
+    margin-bottom: 30px;
+  }
+
+  .testimonials-title {
+    font-size: 2rem;
+  }
+
+  .testimonial-card {
+    min-width: 260px;
+    max-width: 300px;
+    padding: 20px 16px;
+  }
+
+  .card-text {
+    font-size: 0.9rem;
+    -webkit-line-clamp: 3;
+  }
+
+  .star {
+    font-size: 1rem;
+  }
+
+  .card-rating {
+    margin-bottom: 12px;
+  }
+
+  .testimonials-controls {
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .testimonials-title {
+    font-size: 1.6rem;
+  }
+
+  .testimonials-badge {
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+  }
+
+  .testimonial-card {
+    min-width: 220px;
+    max-width: 260px;
+    padding: 16px 14px;
+    border-radius: 12px;
+  }
+
+  .card-text {
+    font-size: 0.85rem;
+    -webkit-line-clamp: 3;
+  }
+
+  .author-name {
+    font-size: 0.9rem;
+  }
+
+  .author-title {
+    font-size: 0.75rem;
+  }
+
+  .star {
+    font-size: 0.9rem;
+  }
+
+  .scroll-hint {
+    font-size: 0.7rem;
+  }
+}
+
+@media (min-width: 1400px) {
+  .testimonials-container {
+    max-width: 1320px;
+  }
+
+  .testimonial-card {
+    min-width: 380px;
+    max-width: 420px;
+    padding: 32px 28px;
+  }
+
+  .testimonials-title {
+    font-size: 3.2rem;
+  }
+
+  .card-text {
+    font-size: 1rem;
+  }
+}

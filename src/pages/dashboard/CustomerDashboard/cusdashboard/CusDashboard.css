@@ -1,0 +1,480 @@
+.dashboard-page {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  color: var(--text-primary);
+}
+
+.dashboard-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dashboard-hero-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 24px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(224, 138, 14, 0.16), var(--surface));
+  border: 1px solid rgba(224, 138, 14, 0.2);
+  box-shadow: 0 12px 30px var(--shadow);
+}
+
+.greeting-kicker {
+  color: #f1b45a;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.greeting-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.greeting-subtitle {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  max-width: 620px;
+}
+
+.hero-highlight {
+  min-width: 200px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: var(--surface-strong);
+  border: 1px solid var(--border);
+}
+
+.hero-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(76, 175, 80, 0.16);
+  color: #7edb87;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.hero-highlight-text {
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--text-secondary);
+}
+
+.action-btn:hover {
+  background: rgba(var(--surface-rgb), 0.05);
+  border-color: rgba(224, 138, 14, 0.2);
+  transform: translateY(-2px);
+}
+
+.action-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 24px;
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  background: rgba(var(--surface-rgb), 0.05);
+  border-color: rgba(224, 138, 14, 0.2);
+}
+
+.stat-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.jobs-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.jobs-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.services-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.section-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.service-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  text-align: left;
+}
+
+.service-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(224, 138, 14, 0.32);
+  background: rgba(224, 138, 14, 0.1);
+}
+
+.service-icon {
+  font-size: 1.4rem;
+}
+
+.service-name {
+  font-weight: 700;
+}
+
+.service-description {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.jobs-tabs {
+  display: flex;
+  gap: 8px;
+}
+
+.tab-btn {
+  padding: 6px 16px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 6px;
+}
+
+.tab-btn.active {
+  color: #e08a0e;
+  background: rgba(224, 138, 14, 0.08);
+}
+
+.tab-btn:hover:not(.active) {
+  color: var(--text-secondary);
+}
+
+.jobs-content {
+  padding: 20px 0;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 40px 20px;
+  background: var(--surface);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+
+.booking-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 18px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  margin-bottom: 12px;
+}
+
+.booking-title {
+  color: var(--text-primary);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.booking-location,
+.booking-meta,
+.booking-time {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.booking-status-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.booking-status {
+  padding: 4px 10px;
+  border-radius: 999px;
+  text-transform: capitalize;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.booking-status.pending {
+  background: rgba(224, 138, 14, 0.16);
+  color: #e08a0e;
+}
+
+.booking-status.assigned {
+  background: rgba(76, 175, 80, 0.16);
+  color: #4caf50;
+}
+
+.booking-status.completed {
+  background: rgba(46, 204, 113, 0.16);
+  color: #2ecc71;
+}
+
+.booking-status.cancelled {
+  background: rgba(255, 71, 87, 0.16);
+  color: #ff6b7a;
+}
+
+.empty-text {
+  font-size: 1rem;
+  color: rgba(var(--text-primary-rgb), 0.5);
+  font-weight: 500;
+}
+
+.empty-subtext {
+  font-size: 0.85rem;
+  color: rgba(var(--text-primary-rgb), 0.3);
+}
+
+.availability-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: rgba(var(--surface-rgb), 0.03);
+  border: 1px solid rgba(var(--border-rgb), 0.06);
+  border-radius: 12px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.availability-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-dot.online {
+  background: #4caf50;
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+}
+
+.status-dot.offline {
+  background: #ff4757;
+  box-shadow: 0 0 10px rgba(255, 71, 87, 0.3);
+}
+
+.status-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: rgba(var(--text-primary-rgb), 0.7);
+}
+
+.toggle-status-btn {
+  padding: 8px 24px;
+  background: rgba(var(--surface-rgb), 0.06);
+  border: 1px solid rgba(var(--border-rgb), 0.08);
+  border-radius: 8px;
+  color: rgba(var(--text-primary-rgb), 0.7);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.85rem;
+}
+
+.toggle-status-btn:hover {
+  background: rgba(var(--surface-rgb), 0.1);
+  color: var(--text-primary);
+}
+
+@media (max-width: 1024px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .services-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .quick-actions {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .quick-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-hero-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .greeting-title {
+    font-size: 1.4rem;
+  }
+
+  .stat-card {
+    padding: 16px 20px;
+  }
+
+  .stat-value {
+    font-size: 1.2rem;
+  }
+
+  .jobs-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .availability-section {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .availability-status {
+    justify-content: center;
+  }
+
+  .toggle-status-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .jobs-tabs {
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+
+  .tab-btn {
+    font-size: 0.7rem;
+    padding: 4px 12px;
+  }
+
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .action-btn {
+    padding: 12px 16px;
+  }
+
+  .action-name {
+    font-size: 0.8rem;
+  }
+
+  .empty-state {
+    padding: 30px 16px;
+  }
+}
+
