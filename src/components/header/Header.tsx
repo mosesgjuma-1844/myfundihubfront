@@ -50,11 +50,13 @@ const Header: React.FC = () => {
   };
 
   const handleBookService = () => {
+    console.log('cta clicked - Header Book Service');
     closeMenu();
     navigate("/register");
   };
 
   const handleLogin = () => {
+    console.log('cta clicked - Header Login');
     closeMenu();
     navigate("/login");
   };
@@ -137,10 +139,12 @@ const Header: React.FC = () => {
         </button>
       </div>
 
-      <div
-        className={`mobile-overlay ${menuOpen ? "active" : ""}`}
-        onClick={closeMenu}
-      ></div>
+      {menuOpen && (
+        <div
+          className={`mobile-overlay active`}
+          onClick={closeMenu}
+        ></div>
+      )}
     </header>
   );
 };

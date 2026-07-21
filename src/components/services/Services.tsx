@@ -79,6 +79,7 @@ const Services: React.FC = () => {
   }, []);
 
   const handleBookService = () => {
+    console.log('cta clicked - Services');
     navigate('/login');
   };
 

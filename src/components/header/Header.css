@@ -353,23 +353,23 @@
    ============================================================ */
 
 .mobile-overlay {
-  display: none;
+  /* keep the overlay in the DOM for transitions but not intercept clicks when closed */
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   z-index: 999;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  visibility: hidden;
+  pointer-events: none; /* IMPORTANT: do not capture pointer events when closed */
+  transition: opacity 0.25s ease, visibility 0.25s ease;
 }
 
 .mobile-overlay.active {
-  display: block;
   opacity: 1;
+  visibility: visible;
+  pointer-events: auto; /* allow clicks to close the menu when active */
 }
 
 

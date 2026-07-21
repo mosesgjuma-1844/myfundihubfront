@@ -134,10 +134,12 @@ const HowItWorks: React.FC = () => {
   }, []);
 
   const handleBookService = () => {
+    console.log('cta clicked - HowItWorks');
     navigate('/login');
   };
 
   const handleBrowseServices = () => {
+    console.log('cta clicked - Browse Services');
     document.getElementById('services')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
