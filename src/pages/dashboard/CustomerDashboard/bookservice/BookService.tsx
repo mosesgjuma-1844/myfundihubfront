@@ -6,7 +6,6 @@ import { APIDomain } from '../../../../utils/APIDomain';
 const BookService: React.FC = () => {
   const [serviceType, setServiceType] = useState('');
   const [location, setLocation] = useState('');
-  const [county, setCounty] = useState('');
   const [townOrEstate, setTownOrEstate] = useState('');
   const [landmark, setLandmark] = useState('');
   const [latitude, setLatitude] = useState<number | null>(null);
@@ -74,9 +73,33 @@ const BookService: React.FC = () => {
     );
   };
 
+  const today = new Date();
+  const todayDate = today.toISOString().split('T')[0];
+  const currentTime = `${String(today.getHours()).padStart(2, '0')}:${String(today.getMinutes()).padStart(2, '0')}`;
+
+  const isPastDateTime = (selectedDate: string, selectedTime: string) => {
+    if (!selectedDate) return true;
+
+    if (selectedDate < todayDate) {
+      return true;
+    }
+
+    if (selectedDate === todayDate && selectedTime && selectedTime < currentTime) {
+      return true;
+    }
+
+    return false;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (isSubmitting) return;
+
+    if (isPastDateTime(scheduledDate, scheduledTime)) {
+      setStatusType('error');
+      setStatusMessage('Please select a valid date and time in the present or future.');
+      return;
+    }
 
     setStatusMessage('');
     setStatusType('');
@@ -90,7 +113,6 @@ const BookService: React.FC = () => {
           customerId: customerId ?? undefined,
           serviceType,
           location,
-          county,
           townOrEstate,
           landmark,
           latitude,
@@ -165,18 +187,6 @@ const BookService: React.FC = () => {
 
           <div className="address-grid">
             <div className="form-group">
-              <label>County *</label>  
-               <input
-                type="text"
-                className="form-input"
-                placeholder="e.g. Kilimani"
-                value={county}
-                onChange={(e) => setCounty(e.target.value)}
-                required
-              />            
-            </div>
-
-            <div className="form-group">
               <label>Town / Estate *</label>
               <input
                 type="text"
@@ -227,6 +237,7 @@ const BookService: React.FC = () => {
               type="date"
               className="form-input"
               value={scheduledDate}
+              min={todayDate}
               onChange={(e) => setScheduledDate(e.target.value)}
               required
             />
@@ -237,6 +248,7 @@ const BookService: React.FC = () => {
               type="time"
               className="form-input"
               value={scheduledTime}
+              min={scheduledDate === todayDate ? currentTime : undefined}
               onChange={(e) => setScheduledTime(e.target.value)}
               required
             />

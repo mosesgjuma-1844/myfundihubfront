@@ -149,22 +149,32 @@
 .theme-toggle-group {
   display: inline-flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .theme-toggle-btn {
-  padding: 8px 14px;
-  border-radius: 999px;
+  padding: 10px 16px;
+  border-radius: 12px;
   border: 1px solid var(--border);
-  background: var(--surface);
+  background: var(--surface-strong);
   color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.2s ease;
+  font-weight: 600;
+  min-width: 92px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.theme-toggle-btn:hover {
+  transform: translateY(-1px);
+  border-color: rgba(224, 138, 14, 0.45);
 }
 
 .theme-toggle-btn.active {
-  background: #e08a0e;
+  background: linear-gradient(135deg, #e08a0e, #c47a0c);
   border-color: #e08a0e;
-  color: var(--text-primary);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(224, 138, 14, 0.28);
 }
 
 .option-btn.danger-btn {
@@ -188,9 +198,26 @@
 
   .settings-option {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 12px;
     padding: 12px;
+  }
+
+  .option-info {
+    width: 100%;
+  }
+
+  .theme-toggle-group {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .theme-toggle-btn {
+    width: 100%;
+    min-width: 0;
+    text-align: center;
   }
 
   .option-btn {

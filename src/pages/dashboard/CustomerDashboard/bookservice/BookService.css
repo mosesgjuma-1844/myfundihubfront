@@ -75,7 +75,13 @@
 }
 
 .form-select option {
-  background: #1a1a1a;
+  background: var(--surface);
+  color: var(--text-primary);
+}
+
+.form-select option:checked,
+.form-select option:hover {
+  background: rgba(var(--text-primary-rgb), 0.08);
   color: var(--text-primary);
 }
 
