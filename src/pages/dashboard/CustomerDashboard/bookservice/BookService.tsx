@@ -4,8 +4,12 @@ import './BookService.css';
 import { APIDomain } from '../../../../utils/APIDomain';
 
 const BookService: React.FC = () => {
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth <= 768 : false
+  );
   const [serviceType, setServiceType] = useState('');
   const [location, setLocation] = useState('');
+  const [county, setCounty] = useState('');
   const [townOrEstate, setTownOrEstate] = useState('');
   const [landmark, setLandmark] = useState('');
   const [latitude, setLatitude] = useState<number | null>(null);
@@ -21,6 +25,13 @@ const BookService: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
     try {
       const rawUser = localStorage.getItem('user');
       if (rawUser) {
@@ -32,6 +43,8 @@ const BookService: React.FC = () => {
     } catch {
       setCustomerId(null);
     }
+
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const estimateCost = (selectedService: string) => {
@@ -113,6 +126,7 @@ const BookService: React.FC = () => {
           customerId: customerId ?? undefined,
           serviceType,
           location,
+          county,
           townOrEstate,
           landmark,
           latitude,
@@ -146,7 +160,10 @@ const BookService: React.FC = () => {
 
   return (
     <div className="book-service-page">
-      <div className="page-header">
+      <div
+        className="page-header"
+        style={isMobile ? { marginTop: '52px' } : undefined}
+      >
         <h1 className="page-title">Book a Service</h1>
         <p className="page-subtitle">Fill in the details below to request a service</p>
       </div>
@@ -186,6 +203,18 @@ const BookService: React.FC = () => {
           </div>
 
           <div className="address-grid">
+            <div className="form-group">
+              <label>County *</label>
+              <input
+                type="text"
+                className="form-input"
+                placeholder="e.g. Nairobi"
+                value={county}
+                onChange={(e) => setCounty(e.target.value)}
+                required
+              />
+            </div>
+
             <div className="form-group">
               <label>Town / Estate *</label>
               <input

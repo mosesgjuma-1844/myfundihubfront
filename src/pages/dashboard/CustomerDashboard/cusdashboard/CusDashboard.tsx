@@ -1,5 +1,6 @@
 // cusdashboard/Dashboard.tsx
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './CusDashboard.css';
 import { apiGet, type BookingSummary } from '../../../../utils/api';
 
@@ -27,6 +28,7 @@ interface StoredUser {
 }
 
 const CusDashboard: React.FC = () => {
+  const navigate = useNavigate();
   const [activeJobTab, setActiveJobTab] = useState<'active' | 'past'>('active');
   const [bookings, setBookings] = useState<BookingSummary[]>([]);
   const [stats, setStats] = useState<DashboardResponse['stats']>([]);
@@ -110,6 +112,9 @@ const CusDashboard: React.FC = () => {
         <div className="hero-highlight">
           <span className="hero-badge">Live updates</span>
           <p className="hero-highlight-text">{bookings.length} service request{bookings.length === 1 ? '' : 's'} tracked so far.</p>
+          <button type="button" className="hero-cta-btn" onClick={() => navigate('/customer-dashboard/book-service')}>
+            Book Service
+          </button>
         </div>
       </div>
 

@@ -92,6 +92,11 @@ const CustomerDrawer = ({
               <NavLink
                 key={item.id}
                 to={item.link}
+                onClick={() => {
+                  if (isMobile) {
+                    onToggle();
+                  }
+                }}
                 className={({ isActive }) =>
                   `drawer-item ${isActive ? 'active' : ''}`
                 }

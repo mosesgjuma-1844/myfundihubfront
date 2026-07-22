@@ -44,6 +44,13 @@ const CustomerDashboard: React.FC = () => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 
+  useEffect(() => {
+    const dashboardContent = document.querySelector('.dashboard-content') as HTMLElement | null;
+    if (dashboardContent) {
+      dashboardContent.scrollTop = 0;
+    }
+  }, []);
+
   const handleSidebarToggle = () => {
     setIsSidebarOpen((prev) => !prev);
   };

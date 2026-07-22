@@ -85,7 +85,7 @@
 
 @media (max-width: 768px) {
   .dashboard-content {
-    padding: 16px;
+    padding: 56px 16px 16px !important;
     max-height: 100vh;
   }
 
@@ -98,7 +98,7 @@
 
 @media (max-width: 480px) {
   .dashboard-content {
-    padding: 12px;
+    padding: 56px 12px 12px !important;
   }
 }
 
