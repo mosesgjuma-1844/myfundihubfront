@@ -35,6 +35,15 @@
   margin-bottom: 32px;
 }
 
+.login-logo {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  display: inline-block;
+  margin-bottom: 12px;
+  border-radius: 8px;
+}
+
 .login-brand {
   font-size: 1.8rem;
   font-weight: 800;

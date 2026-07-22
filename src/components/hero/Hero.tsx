@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Hero.css';
 import Vedio4 from '../../assets/images/Vedio4.mp4';
 
@@ -26,6 +27,15 @@ const Hero: React.FC = () => {
     }
   };
 
+  const navigate = useNavigate();
+
+  const handleBookService = () => {
+    console.log('cta clicked - Hero Book Service');
+    navigate('/register');
+  };
+
+  
+
   return (
     <section className="hero" id="hero">
       <div className="hero-overlay"></div>
@@ -41,6 +51,10 @@ const Hero: React.FC = () => {
        appliance repair, CCTV, internet installation, and general maintenance services
           </p>
 
+          <div className="hero-actions">
+            <button className="btn hero-cta" onClick={handleBookService}>Book a fundi</button>
+          </div>
+
         </div>
 
         <div className="hero-illustration">
@@ -54,7 +68,7 @@ const Hero: React.FC = () => {
               poster={Vedio4}
             >
               <source src={Vedio4} type="video/mp4" />
-              Your browser does not support the video tag.
+              Your browser does not support the video tag. 
             </video>
             <div className={`video-overlay ${isPlaying ? 'hidden' : ''}`}>
               <div className="play-button">▶</div>
