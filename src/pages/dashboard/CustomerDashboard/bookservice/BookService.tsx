@@ -352,7 +352,6 @@ const BookService: React.FC = () => {
           <p><strong>Window:</strong> {bookingSummary.serviceWindow}</p>
           <p><strong>Date:</strong> {bookingSummary.scheduledDate || 'Today'}</p>
           <p><strong>Time:</strong> {bookingSummary.scheduledTime || 'Now'}</p>
-          <p><strong>Estimated Cost:</strong> KES {bookingSummary.estimatedCost}</p>
           <p><strong>Callout Fee:</strong> KES {bookingSummary.calloutFee ?? bookingSummary.callout_fee ?? bookingSummary.calloutFee ?? calloutFee}</p>
         </div>
       )}
