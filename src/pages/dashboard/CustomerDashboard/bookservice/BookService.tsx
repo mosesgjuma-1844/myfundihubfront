@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import './BookService.css';
 import { APIDomain } from '../../../../utils/APIDomain';
+import { getAuthorizationHeader } from '../../../../utils/tokenManager';
 import PaymentModal from '../../../../components/PaymentModal/PaymentModal';
 
 const BookService: React.FC = () => {
@@ -137,9 +138,18 @@ const BookService: React.FC = () => {
     setIsSubmitting(true);
 
     try {
+      const authHeader = getAuthorizationHeader();
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+      };
+
+      if (authHeader) {
+        headers.Authorization = authHeader;
+      }
+
       const response = await fetch(`${APIDomain}/bookings/`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({
           customerId: customerId ?? undefined,
           serviceType,
