@@ -65,6 +65,133 @@
   color: rgba(var(--text-primary-rgb), 0.3);
 }
 
+/* Booking Card Styles */
+.booking-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: rgba(var(--surface-rgb), 0.02);
+  border: 1px solid rgba(var(--border-rgb), 0.06);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  margin-bottom: 12px;
+}
+
+.booking-card:hover {
+  background: rgba(var(--surface-rgb), 0.04);
+  border-color: rgba(var(--border-rgb), 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.booking-card > div:first-child {
+  flex: 1;
+}
+
+.booking-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(var(--text-primary-rgb), 0.9);
+  margin: 0 0 4px 0;
+  text-transform: capitalize;
+}
+
+.booking-location {
+  font-size: 0.9rem;
+  color: rgba(var(--text-primary-rgb), 0.6);
+  margin: 0 0 4px 0;
+}
+
+.booking-meta {
+  font-size: 0.85rem;
+  color: rgba(var(--text-primary-rgb), 0.4);
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.booking-fee {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #d9751f;
+  margin: 6px 0 0;
+}
+
+.booking-status-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  margin-left: 16px;
+}
+
+.booking-status {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background-color: #f0f0f0;
+  color: #666;
+}
+
+.booking-status.pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.booking-status.pending_payment {
+  background: linear-gradient(135deg, #fff5e6 0%, #ffe6cc 100%);
+  color: #d9751f;
+  border: 1px solid #ffd699;
+}
+
+.booking-status.assigned {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.booking-status.completed {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+.booking-status.cancelled {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.booking-time {
+  font-size: 0.8rem;
+  color: rgba(var(--text-primary-rgb), 0.5);
+  text-align: right;
+}
+
+.pay-now-btn {
+  padding: 6px 16px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.pay-now-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(102, 126, 234, 0.3);
+}
+
+.pay-now-btn:active {
+  transform: translateY(0);
+}
+
 @media (max-width: 768px) {
   .bookings-tabs {
     gap: 4px;
@@ -81,6 +208,27 @@
 
   .empty-icon {
     font-size: 2.5rem;
+  }
+
+  .booking-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .booking-status-block {
+    align-items: flex-start;
+    margin-left: 0;
+    margin-top: 12px;
+    width: 100%;
+  }
+
+  .booking-time {
+    text-align: left;
+  }
+
+  .pay-now-btn {
+    width: 100%;
+    text-align: center;
   }
 }
 

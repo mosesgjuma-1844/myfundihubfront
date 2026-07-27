@@ -1,0 +1,217 @@
+/* pages/PaymentVerification/PaymentVerification.css */
+
+.payment-verification-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+}
+
+.verification-container {
+  width: 100%;
+  max-width: 500px;
+}
+
+.verification-state {
+  background: white;
+  border-radius: 12px;
+  padding: 48px 32px;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.verification-state h1 {
+  font-size: 24px;
+  margin: 24px 0 8px;
+  color: #333;
+  font-weight: 600;
+}
+
+.verification-state p {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+/* Verifying State */
+.verification-state.verifying {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid #f0f0f0;
+  border-top: 4px solid #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 24px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.verification-state.verifying h1 {
+  margin-bottom: 8px;
+}
+
+/* Success State */
+.verification-state.success {
+  border: 2px solid #4caf50;
+  background: linear-gradient(to bottom, #f5fff5, white);
+}
+
+.success-icon {
+  width: 64px;
+  height: 64px;
+  background-color: #4caf50;
+  color: white;
+  font-size: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin: 0 auto 16px;
+  font-weight: bold;
+}
+
+.verification-state.success h1 {
+  color: #4caf50;
+}
+
+/* Failed State */
+.verification-state.failed {
+  border: 2px solid #f44336;
+  background: linear-gradient(to bottom, #fff5f5, white);
+}
+
+.error-icon {
+  width: 64px;
+  height: 64px;
+  background-color: #f44336;
+  color: white;
+  font-size: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin: 0 auto 16px;
+  font-weight: bold;
+}
+
+.verification-state.failed h1 {
+  color: #f44336;
+}
+
+.payment-details {
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 24px 0;
+  text-align: left;
+}
+
+.payment-details p {
+  margin: 8px 0;
+  font-size: 13px;
+  color: #555;
+}
+
+.payment-details strong {
+  color: #333;
+  font-weight: 600;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge.completed {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-badge.failed {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.redirect-text {
+  font-size: 13px;
+  color: #999;
+  margin: 16px 0 24px;
+  font-style: italic;
+}
+
+.action-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+  margin-top: 16px;
+}
+
+.action-btn.primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.action-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.action-btn.secondary {
+  background-color: #f0f0f0;
+  color: #333;
+  margin-top: 8px;
+}
+
+.action-btn.secondary:hover {
+  background-color: #e0e0e0;
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.action-buttons .action-btn {
+  margin-top: 0;
+}
+
+@media (max-width: 480px) {
+  .verification-state {
+    padding: 32px 16px;
+  }
+
+  .verification-state h1 {
+    font-size: 20px;
+  }
+
+  .success-icon,
+  .error-icon {
+    width: 56px;
+    height: 56px;
+    font-size: 28px;
+  }
+}

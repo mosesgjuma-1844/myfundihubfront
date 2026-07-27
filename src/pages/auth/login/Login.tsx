@@ -1,9 +1,9 @@
 // Login.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Login.css';
 import LogoImg from '../../../assets/images/Logo.png';
 import { useNavigate } from 'react-router-dom';
-import { APIDomain } from '../../../utils/APIDomain';
+import { apiLogin, type LoginResponse, APIError } from '../../../utils/api';
 
 const Login: React.FC = () => {
   const [rememberMe, setRememberMe] = useState(false);
@@ -11,7 +11,23 @@ const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [rateLimitRetryTime, setRateLimitRetryTime] = useState<number | null>(null);
   const navigate = useNavigate();
+
+  // Handle rate limit countdown
+  useEffect(() => {
+    if (rateLimitRetryTime === null || rateLimitRetryTime <= 0) {
+      setRateLimitRetryTime(null);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setRateLimitRetryTime(rateLimitRetryTime - 1);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [rateLimitRetryTime]);
 
   const handleCreateAccount = () => {
     navigate('/register');
@@ -25,34 +41,61 @@ const Login: React.FC = () => {
     e.preventDefault();
     setErrorMessage('');
 
+    // Validate inputs
+    if (!email.trim()) {
+      setErrorMessage('Please enter your email address.');
+      return;
+    }
+
+    if (!password.trim()) {
+      setErrorMessage('Please enter your password.');
+      return;
+    }
+
+    // Check if still rate limited
+    if (rateLimitRetryTime !== null && rateLimitRetryTime > 0) {
+      setErrorMessage(`Too many login attempts. Please try again in ${rateLimitRetryTime} seconds.`);
+      return;
+    }
+
+    setIsLoading(true);
+
     try {
-      const response = await fetch(`${APIDomain}/auth/login/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
+      const response = await apiLogin<LoginResponse>('/auth/login/', {
+        email: email.trim(),
+        password: password.trim(),
       });
 
-      const data = await response.json();
-
-      if (!response.ok || !data.ok) {
-        setErrorMessage(data.message || 'Login failed.');
-        return;
+      if (response.user) {
+        localStorage.setItem('fundiUser', JSON.stringify(response.user));
       }
 
-      if (data.user) {
-        localStorage.setItem('fundiUser', JSON.stringify(data.user));
-      }
-
-      navigate(data.redirect || '/customer-dashboard');
+      navigate(response.redirect || '/customer-dashboard');
     } catch (error) {
-      setErrorMessage('Unable to reach the backend server.');
+      if (error instanceof APIError) {
+        if (error.isRateLimit) {
+          // Set retry timer to 15 minutes (900 seconds)
+          setRateLimitRetryTime(900);
+          setErrorMessage(
+            '⏱️ Too many login attempts. Please try again in 15 minutes.'
+          );
+        } else {
+          setErrorMessage(error.message || 'Login failed. Please check your credentials.');
+        }
+      } else {
+        setErrorMessage('Unable to reach the server. Please check your connection and try again.');
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  const isSubmitDisabled = isLoading || (rateLimitRetryTime !== null && rateLimitRetryTime > 0);
+  const submitButtonText = isLoading
+    ? 'Signing in...'
+    : rateLimitRetryTime !== null && rateLimitRetryTime > 0
+    ? `Try again in ${rateLimitRetryTime}s`
+    : 'Sign in';
 
   return (
     <div className="login-page">
@@ -79,6 +122,7 @@ const Login: React.FC = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@email.com"
+                disabled={isLoading}
               />
             </div>
 
@@ -91,11 +135,13 @@ const Login: React.FC = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
+                  disabled={isLoading}
                 />
                 <button 
                   type="button" 
                   className="password-toggle"
                   onClick={() => setShowPassword(!showPassword)}
+                  disabled={isLoading}
                 >
                   {showPassword ? 'Hide' : 'Show'}
                 </button>
@@ -108,22 +154,38 @@ const Login: React.FC = () => {
                   type="checkbox" 
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
+                  disabled={isLoading}
                 />
                 <span>Remember me</span>
               </label>
-              <button type="button" className="forgot-link" onClick={handleForgotPassword}>
+              <button 
+                type="button" 
+                className="forgot-link" 
+                onClick={handleForgotPassword}
+                disabled={isLoading}
+              >
                 Forgot password?
               </button>
             </div>
 
-            {errorMessage && <p className="form-hint" style={{ color: '#d33' }}>{errorMessage}</p>}
-            <button type="submit" className="signin-btn">Sign in</button>
+            {errorMessage && (
+              <p className="form-hint" style={{ color: '#d33' }}>
+                {errorMessage}
+              </p>
+            )}
+            <button 
+              type="submit" 
+              className="signin-btn"
+              disabled={isSubmitDisabled}
+            >
+              {submitButtonText}
+            </button>
           </form>
 
           <div className="login-footer">
             <p className="divider-text">or</p>
             <p className="create-account">
-              Don't have an account? <button type="button" onClick={handleCreateAccount} className="create-link">Create one</button>
+              Don't have an account? <button type="button" onClick={handleCreateAccount} className="create-link" disabled={isLoading}>Create one</button>
             </p>
             
           </div>
@@ -136,11 +198,11 @@ const Login: React.FC = () => {
             </div>
             <div className="feature-item">
               <h4 className="feature-title">Secure</h4>
-              <p className="feature-desc">We authenticate and send you to the correct role-based area.</p>
+              <p className="feature-desc">Enhanced security with JWT tokens and rate limiting protection.</p>
             </div>
             <div className="feature-item">
               <h4 className="feature-title">Fast access</h4>
-              <p className="feature-desc">One account — multiple entry points depending on backend rules.</p>
+              <p className="feature-desc">One account — multiple entry points depending on your role.</p>
             </div>
           </div>
 

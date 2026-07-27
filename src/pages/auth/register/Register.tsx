@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import './Register.css';
 import CustomerImage from '../../../assets/images/CustomerImage.jpeg';
 import TechnicianImage from '../../../assets/images/TechnicianImage.jpg';
-import { APIDomain } from '../../../utils/APIDomain';
+import { apiPost, APIError } from '../../../utils/api';
 
 interface RegisterFormData {
   firstName: string;
@@ -23,6 +23,8 @@ const Register: React.FC = () => {
   const [role, setRole] = useState<'customer' | 'technician'>('customer');
   const [statusMessage, setStatusMessage] = useState('');
   const [statusType, setStatusType] = useState<'success' | 'error' | ''>('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [rateLimitRetryTime, setRateLimitRetryTime] = useState<number | null>(null);
   const navigate = useNavigate();
 
   const {
@@ -36,36 +38,63 @@ const Register: React.FC = () => {
 
   const password = watch('password');
 
+  // Handle rate limit countdown
+  useEffect(() => {
+    if (rateLimitRetryTime === null || rateLimitRetryTime <= 0) {
+      setRateLimitRetryTime(null);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setRateLimitRetryTime(rateLimitRetryTime - 1);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [rateLimitRetryTime]);
+
   const onSubmit = async (data: RegisterFormData) => {
     setStatusMessage('');
     setStatusType('');
 
+    // Check if still rate limited
+    if (rateLimitRetryTime !== null && rateLimitRetryTime > 0) {
+      setStatusType('error');
+      setStatusMessage(`Too many registration attempts. Please try again in ${rateLimitRetryTime} seconds.`);
+      return;
+    }
+
+    setIsSubmitting(true);
+
     try {
-      const response = await fetch(`${APIDomain}/auth/register/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const result = await apiPost<{ ok: boolean; message: string; role: string }>(
+        '/auth/register/',
+        {
           ...data,
           role,
-        }),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok || !result.ok) {
-        setStatusType('error');
-        setStatusMessage(result.message || 'Account creation failed.');
-        return;
-      }
+        },
+        false // Don't include auth header for registration
+      );
 
       setStatusType('success');
       setStatusMessage(result.message || 'Account created successfully.');
       setTimeout(() => navigate('/login'), 1200);
     } catch (error) {
-      setStatusType('error');
-      setStatusMessage('Unable to reach the server. Please try again.');
+      if (error instanceof APIError) {
+        if (error.isRateLimit) {
+          // Set retry timer to 1 hour (3600 seconds)
+          setRateLimitRetryTime(3600);
+          setStatusType('error');
+          setStatusMessage('⏱️ Too many registration attempts. Please try again in 1 hour.');
+        } else {
+          setStatusType('error');
+          setStatusMessage(error.message || 'Account creation failed.');
+        }
+      } else {
+        setStatusType('error');
+        setStatusMessage('Unable to reach the server. Please try again.');
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -76,6 +105,8 @@ const Register: React.FC = () => {
   const handleRoleSelect = (selectedRole: 'customer' | 'technician') => {
     setRole(selectedRole);
   };
+
+  const isFormDisabled = isSubmitting || (rateLimitRetryTime !== null && rateLimitRetryTime > 0);
 
   return (
     <div className="register-page">
@@ -97,6 +128,7 @@ const Register: React.FC = () => {
             <button
               className={`role-btn ${role === 'customer' ? 'active' : ''}`}
               onClick={() => handleRoleSelect('customer')}
+              disabled={isFormDisabled}
             >
               <span className="role-icon">🏠</span>
               <span className="role-label">Customer</span>
@@ -105,6 +137,7 @@ const Register: React.FC = () => {
             <button
               className={`role-btn ${role === 'technician' ? 'active' : ''}`}
               onClick={() => handleRoleSelect('technician')}
+              disabled={isFormDisabled}
             >
               <span className="role-icon">🔧</span>
               <span className="role-label">Technician</span>
@@ -127,6 +160,7 @@ const Register: React.FC = () => {
                   type="text"
                   className={`form-input ${errors.firstName ? 'error' : ''}`}
                   placeholder="Jane"
+                  disabled={isFormDisabled}
                   {...register('firstName', {
                     required: 'First name is required',
                     minLength: {
@@ -146,6 +180,7 @@ const Register: React.FC = () => {
                   type="text"
                   className={`form-input ${errors.lastName ? 'error' : ''}`}
                   placeholder="Wanjiku"
+                  disabled={isFormDisabled}
                   {...register('lastName', {
                     required: 'Last name is required',
                     minLength: {
@@ -166,6 +201,7 @@ const Register: React.FC = () => {
                 type="email"
                 className={`form-input ${errors.email ? 'error' : ''}`}
                 placeholder="jane@email.com"
+                disabled={isFormDisabled}
                 {...register('email', {
                   required: 'Email is required',
                   pattern: {
@@ -185,6 +221,7 @@ const Register: React.FC = () => {
                 type="email"
                 className={`form-input ${errors.confirmEmail ? 'error' : ''}`}
                 placeholder="Re-enter email"
+                disabled={isFormDisabled}
                 {...register('confirmEmail', {
                   required: 'Please confirm your email',
                   validate: (value: any) =>
@@ -202,6 +239,7 @@ const Register: React.FC = () => {
                 type="tel"
                 className={`form-input ${errors.phoneNumber ? 'error' : ''}`}
                 placeholder="0782345678"
+                disabled={isFormDisabled}
                 {...register('phoneNumber', {
                   required: 'Phone number is required',
                   pattern: {
@@ -221,6 +259,7 @@ const Register: React.FC = () => {
                 type="text"
                 className={`form-input ${errors.username ? 'error' : ''}`}
                 placeholder="jane_wanjiku"
+                disabled={isFormDisabled}
                 {...register('username', {
                   required: 'Username is required',
                   minLength: {
@@ -240,6 +279,7 @@ const Register: React.FC = () => {
                   <label className="form-label">Specialization</label>
                   <select
                     className={`form-input ${errors.specialization ? 'error' : ''}`}
+                    disabled={isFormDisabled}
                     {...register('specialization', {
                       required: 'Specialization is required',
                     })}
@@ -263,6 +303,7 @@ const Register: React.FC = () => {
                     type="number"
                     className={`form-input ${errors.yearsOfExperience ? 'error' : ''}`}
                     placeholder="Enter years of experience"
+                    disabled={isFormDisabled}
                     {...register('yearsOfExperience', {
                       required: 'Years of experience is required',
                       min: {
@@ -290,15 +331,12 @@ const Register: React.FC = () => {
                 type="password"
                 className={`form-input ${errors.password ? 'error' : ''}`}
                 placeholder="Enter password"
+                disabled={isFormDisabled}
                 {...register('password', {
                   required: 'Password is required',
                   minLength: {
                     value: 8,
                     message: 'Password must be at least 8 characters',
-                  },
-                  pattern: {
-                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-                    message: 'Password must contain uppercase, lowercase, number, and special character',
                   },
                 })}
               />
@@ -313,6 +351,7 @@ const Register: React.FC = () => {
                 type="password"
                 className={`form-input ${errors.confirmPassword ? 'error' : ''}`}
                 placeholder="Confirm password"
+                disabled={isFormDisabled}
                 {...register('confirmPassword', {
                   required: 'Please confirm your password',
                   validate: (value: any) =>
@@ -330,15 +369,15 @@ const Register: React.FC = () => {
               </div>
             )}
 
-            <button type="submit" className="register-btn">
-              Create Account
+            <button type="submit" className="register-btn" disabled={isFormDisabled}>
+              {isSubmitting ? 'Creating Account...' : rateLimitRetryTime !== null && rateLimitRetryTime > 0 ? `Try again in ${rateLimitRetryTime}s` : 'Create Account'}
             </button>
           </form>
 
           <div className="register-footer">
             <p className="signin-text">
               Already have an account?{' '}
-              <button type="button" className="signin-link" onClick={handleSignIn}>
+              <button type="button" className="signin-link" onClick={handleSignIn} disabled={isFormDisabled}>
                 Sign in →
               </button>
             </p>

@@ -1,44 +1,78 @@
 // ForgotPassword.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ForgotPassword.css';
-import { APIDomain } from '../../../utils/APIDomain';
+import { apiPost, APIError } from '../../../utils/api';
 
 const ForgotPassword: React.FC = () => {
   const [email, setEmail] = useState('');
   const [statusMessage, setStatusMessage] = useState('');
+  const [statusType, setStatusType] = useState<'success' | 'error' | ''>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [rateLimitRetryTime, setRateLimitRetryTime] = useState<number | null>(null);
   const navigate = useNavigate();
+
+  // Handle rate limit countdown
+  useEffect(() => {
+    if (rateLimitRetryTime === null || rateLimitRetryTime <= 0) {
+      setRateLimitRetryTime(null);
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setRateLimitRetryTime(rateLimitRetryTime - 1);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [rateLimitRetryTime]);
 
   const handleSendCode = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (!email.trim()) {
+      setStatusType('error');
       setStatusMessage('Please enter your email address.');
+      return;
+    }
+
+    // Check if still rate limited
+    if (rateLimitRetryTime !== null && rateLimitRetryTime > 0) {
+      setStatusType('error');
+      setStatusMessage(`Too many requests. Please try again in ${rateLimitRetryTime} seconds.`);
       return;
     }
 
     setIsSubmitting(true);
     setStatusMessage('');
+    setStatusType('');
 
     try {
-      const response = await fetch(`${APIDomain}/auth/forgot-password/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
+      const result = await apiPost<{ ok: boolean; message: string }>(
+        '/auth/forgot-password/',
+        { email: email.trim() },
+        false // Don't include auth header
+      );
 
-      const data = await response.json();
-      if (!response.ok || !data.ok) {
-        setStatusMessage(data.message || 'Unable to send reset code.');
-        return;
-      }
-
+      setStatusType('success');
+      setStatusMessage(result.message || 'Reset code sent successfully.');
+      
       localStorage.setItem('resetEmail', email.trim());
-      navigate('/verify-reset-code');
+      setTimeout(() => navigate('/verify-reset-code'), 1500);
     } catch (error) {
-      setStatusMessage('Unable to reach the server. Please try again.');
+      if (error instanceof APIError) {
+        if (error.isRateLimit) {
+          // Set retry timer to 1 hour (3600 seconds)
+          setRateLimitRetryTime(3600);
+          setStatusType('error');
+          setStatusMessage('⏱️ Too many reset requests. Please try again in 1 hour.');
+        } else {
+          setStatusType('error');
+          setStatusMessage(error.message || 'Unable to send reset code.');
+        }
+      } else {
+        setStatusType('error');
+        setStatusMessage('Unable to reach the server. Please check your connection and try again.');
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -48,12 +82,19 @@ const ForgotPassword: React.FC = () => {
     navigate('/login');
   };
 
+  const isFormDisabled = isSubmitting || (rateLimitRetryTime !== null && rateLimitRetryTime > 0);
+  const submitButtonText = isSubmitting
+    ? 'Sending...'
+    : rateLimitRetryTime !== null && rateLimitRetryTime > 0
+    ? `Try again in ${rateLimitRetryTime}s`
+    : 'Send Code';
+
   return (
     <div className="forgot-password-page">
       <div className="forgot-password-container">
         <div className="forgot-password-left">
           <div className="forgot-password-header">
-            <button className="back-btn" onClick={handleBack}>
+            <button className="back-btn" onClick={handleBack} disabled={isFormDisabled}>
               ← Back
             </button>
             <h1 className="forgot-password-brand">
@@ -75,20 +116,29 @@ const ForgotPassword: React.FC = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                disabled={isFormDisabled}
               />
             </div>
 
-            {statusMessage && <p className="form-hint" style={{ color: '#d33' }}>{statusMessage}</p>}
+            {statusMessage && (
+              <p className="form-hint" style={{ color: statusType === 'error' ? '#d33' : '#28a745' }}>
+                {statusMessage}
+              </p>
+            )}
 
-            <button type="submit" className="send-code-btn" disabled={isSubmitting}>
-              {isSubmitting ? 'Sending...' : 'Send Code'}
+            <button 
+              type="submit" 
+              className="send-code-btn" 
+              disabled={isFormDisabled}
+            >
+              {submitButtonText}
             </button>
           </form>
 
           <div className="forgot-password-footer">
             <p className="back-to-login">
               Remember your password?{' '}
-              <button type="button" className="login-link" onClick={handleBack}>
+              <button type="button" className="login-link" onClick={handleBack} disabled={isFormDisabled}>
                 Sign in
               </button>
             </p>

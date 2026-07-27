@@ -1,8 +1,9 @@
 // CustomerDashboard.tsx
 import React, { useState, useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import './CustomerDashboard.css';
 import CustomerDrawer from './aside/CustomerDrawer';
+import { useRoleBasedAccess } from '../../../hooks/useRoleBasedAccess';
 
 type ThemeMode = 'dark' | 'light';
 
@@ -20,6 +21,13 @@ const CustomerDashboard: React.FC = () => {
       return savedTheme === 'light' ? 'light' : 'dark';
     }
     return 'dark';
+  });
+
+  const navigate = useNavigate();
+  const { isLoading } = useRoleBasedAccess({
+    onUnauthenticated: () => {
+      navigate('/login', { replace: true });
+    },
   });
 
   useEffect(() => {
@@ -54,6 +62,22 @@ const CustomerDashboard: React.FC = () => {
   const handleSidebarToggle = () => {
     setIsSidebarOpen((prev) => !prev);
   };
+
+  // Show loading state while checking authorization
+  if (isLoading) {
+    return (
+      <div className={`customer-dashboard ${theme === 'light' ? 'theme-light' : 'theme-dark'}`} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>Loading...</div>
+          <div style={{ color: '#999' }}>Checking permissions</div>
+        </div>
+      </div>
+    );
+  }
+
+  // Note: Customer dashboard allows any authenticated user
+  // Admin and technician can also access customer dashboard
+  // Not showing access denied page for customer dashboard
 
   return (
     <div className={`customer-dashboard ${theme === 'light' ? 'theme-light' : 'theme-dark'}`}>

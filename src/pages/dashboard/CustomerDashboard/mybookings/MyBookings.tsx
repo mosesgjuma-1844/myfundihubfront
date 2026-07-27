@@ -2,6 +2,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import './MyBookings.css';
 import { apiGet, type BookingSummary } from '../../../../utils/api';
+import PaymentModal from '../../../../components/PaymentModal/PaymentModal';
 
 interface StoredUser {
   id?: number;
@@ -17,8 +18,27 @@ const MyBookings: React.FC = () => {
   const [bookings, setBookings] = useState<BookingSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [selectedBookingForPayment, setSelectedBookingForPayment] = useState<BookingSummary | null>(null);
 
   const tabs = ['All', 'Active', 'Completed', 'Cancelled'];
+
+  const resolveCalloutFee = (booking: BookingSummary | null | undefined): number => {
+    const rawValue = booking?.calloutFee ?? booking?.callout_fee;
+
+    if (typeof rawValue === 'number' && Number.isFinite(rawValue)) {
+      return rawValue;
+    }
+
+    if (typeof rawValue === 'string') {
+      const parsed = Number(rawValue);
+      if (Number.isFinite(parsed)) {
+        return parsed;
+      }
+    }
+
+    return 1000;
+  };
 
   useEffect(() => {
     const storedUser = localStorage.getItem('fundiUser');
@@ -57,7 +77,10 @@ const MyBookings: React.FC = () => {
     const normalizedTab = activeTab.toLowerCase();
     return bookings.filter((booking) => {
       if (normalizedTab === 'active') {
-        return booking.status !== 'completed' && booking.status !== 'cancelled';
+        return (
+          booking.status !== 'completed' &&
+          booking.status !== 'cancelled'
+        );
       }
       if (normalizedTab === 'completed') {
         return booking.status === 'completed';
@@ -98,20 +121,50 @@ const MyBookings: React.FC = () => {
             <p className="empty-subtext">When you book a service, it will appear here</p>
           </div>
         )}
-        {!loading && !error && filteredBookings.map((booking) => (
-          <div key={booking.id} className="booking-card">
-            <div>
-              <p className="booking-title">{booking.serviceType}</p>
-              <p className="booking-location">{booking.location}</p>
-              <p className="booking-meta">{booking.description || 'No description provided'}</p>
+        {!loading && !error && filteredBookings.map((booking) => {
+          const bookingCalloutFee = resolveCalloutFee(booking);
+
+          return (
+            <div key={booking.id} className="booking-card">
+              <div>
+                <p className="booking-title">{booking.serviceType}</p>
+                <p className="booking-location">{booking.location}</p>
+                <p className="booking-meta">{booking.description || 'No description provided'}</p>
+                <p className="booking-fee">Callout fee: KES {bookingCalloutFee.toLocaleString()}</p>
+              </div>
+              <div className="booking-status-block">
+                <span className={`booking-status ${booking.status}`}>{booking.status}</span>
+                <span className="booking-time">{booking.scheduledDate || 'Today'} • {booking.scheduledTime || 'Now'}</span>
+                {booking.status === 'pending_payment' && (
+                  <button
+                    className="pay-now-btn"
+                    onClick={() => {
+                      setSelectedBookingForPayment(booking);
+                      setShowPaymentModal(true);
+                    }}
+                  >
+                    Pay Now
+                  </button>
+                )}
+              </div>
             </div>
-            <div className="booking-status-block">
-              <span className={`booking-status ${booking.status}`}>{booking.status}</span>
-              <span className="booking-time">{booking.scheduledDate || 'Today'} • {booking.scheduledTime || 'Now'}</span>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
+
+      {showPaymentModal && selectedBookingForPayment && (
+        <PaymentModal
+          bookingId={selectedBookingForPayment.id}
+          calloutFee={resolveCalloutFee(selectedBookingForPayment)}
+          onPaymentInitiated={(authorizationUrl) => {
+            window.location.href = authorizationUrl;
+          }}
+          onClose={() => {
+            setShowPaymentModal(false);
+            setSelectedBookingForPayment(null);
+          }}
+        />
+      )}
     </div>
   );
 };

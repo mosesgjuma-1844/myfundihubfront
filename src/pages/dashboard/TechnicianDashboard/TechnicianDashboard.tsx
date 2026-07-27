@@ -1,8 +1,9 @@
 // TechnicianDashboard.tsx
 import React, { useState, useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import './TechnicianDashboard.css';
 import TechnicianDrawer from './aside/TechnicianDrawer';
+import { useRoleBasedAccess } from '../../../hooks/useRoleBasedAccess';
 
 const TechnicianDashboard: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -10,6 +11,17 @@ const TechnicianDashboard: React.FC = () => {
   const [theme] = useState<'dark' | 'light'>(() => {
     const savedTheme = typeof window !== 'undefined' ? window.localStorage.getItem('fundiTheme') : null;
     return savedTheme === 'light' ? 'light' : 'dark';
+  });
+
+  const navigate = useNavigate();
+  const { isAuthorized, isLoading, error } = useRoleBasedAccess({
+    requiredRole: 'technician',
+    onUnauthorized: () => {
+      navigate('/customer-dashboard', { replace: true });
+    },
+    onUnauthenticated: () => {
+      navigate('/login', { replace: true });
+    },
   });
 
   useEffect(() => {
@@ -37,6 +49,36 @@ const TechnicianDashboard: React.FC = () => {
   const handleSidebarToggle = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+
+  // Show loading state while checking authorization
+  if (isLoading) {
+    return (
+      <div className="technician-dashboard" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>Loading...</div>
+          <div style={{ color: '#999' }}>Checking permissions</div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error if not authorized
+  if (!isAuthorized) {
+    return (
+      <div className="technician-dashboard" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+        <div style={{ textAlign: 'center', color: '#d33' }}>
+          <div style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>🚫 Access Denied</div>
+          <div>{error || 'You do not have permission to access this resource.'}</div>
+          <button 
+            onClick={() => navigate('/customer-dashboard')}
+            style={{ marginTop: '1rem', padding: '0.5rem 1rem', cursor: 'pointer' }}
+          >
+            Go to Dashboard
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="technician-dashboard">

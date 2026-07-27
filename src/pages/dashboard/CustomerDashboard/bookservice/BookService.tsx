@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import './BookService.css';
 import { APIDomain } from '../../../../utils/APIDomain';
+import PaymentModal from '../../../../components/PaymentModal/PaymentModal';
 
 const BookService: React.FC = () => {
   const [isMobile, setIsMobile] = useState(() =>
@@ -23,6 +24,23 @@ const BookService: React.FC = () => {
   const [bookingSummary, setBookingSummary] = useState<any>(null);
   const [customerId, setCustomerId] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [calloutFee, setCalloutFee] = useState(1000);
+
+  const resolveCalloutFee = (value: unknown): number => {
+    if (typeof value === 'number' && Number.isFinite(value)) {
+      return value;
+    }
+
+    if (typeof value === 'string') {
+      const parsed = Number(value);
+      if (Number.isFinite(parsed)) {
+        return parsed;
+      }
+    }
+
+    return 1000;
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -147,9 +165,19 @@ const BookService: React.FC = () => {
         return;
       }
 
+      const nextCalloutFee = resolveCalloutFee(
+        result?.booking?.callout_fee ?? result?.booking?.calloutFee ?? result?.callout_fee ?? result?.calloutFee
+      );
+
       setStatusType('success');
       setStatusMessage(result.message || 'Booking created successfully.');
-      setBookingSummary(result.booking);
+      setCalloutFee(nextCalloutFee);
+      setBookingSummary({
+        ...result.booking,
+        calloutFee: nextCalloutFee,
+      });
+      // Show payment modal after successful booking
+      setShowPaymentModal(true);
     } catch (error) {
       setStatusType('error');
       setStatusMessage('Unable to reach the server. Please try again.');
@@ -315,7 +343,21 @@ const BookService: React.FC = () => {
           <p><strong>Date:</strong> {bookingSummary.scheduledDate || 'Today'}</p>
           <p><strong>Time:</strong> {bookingSummary.scheduledTime || 'Now'}</p>
           <p><strong>Estimated Cost:</strong> KES {bookingSummary.estimatedCost}</p>
+          <p><strong>Callout Fee:</strong> KES {bookingSummary.calloutFee ?? bookingSummary.callout_fee ?? bookingSummary.calloutFee ?? calloutFee}</p>
         </div>
+      )}
+
+      {showPaymentModal && bookingSummary && (
+        <PaymentModal
+          bookingId={bookingSummary.id}
+          calloutFee={calloutFee}
+          onPaymentInitiated={(authorizationUrl) => {
+            window.location.href = authorizationUrl;
+          }}
+          onClose={() => {
+            setShowPaymentModal(false);
+          }}
+        />
       )}
     </div>
   );
