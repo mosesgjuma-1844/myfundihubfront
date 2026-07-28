@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import './Register.css';
 import CustomerImage from '../../../assets/images/CustomerImage.jpeg';
 import TechnicianImage from '../../../assets/images/TechnicianImage.jpg';
@@ -24,8 +24,10 @@ interface RegisterProps {
 }
 
 const Register: React.FC<RegisterProps> = ({ defaultRole }) => {
+  const location = useLocation();
+  const adminMode = new URLSearchParams(location.search).get('admin') === 'true';
   const [role, setRole] = useState<'customer' | 'technician' | 'admin'>(
-    defaultRole || 'customer'
+    defaultRole || (adminMode ? 'admin' : 'customer')
   );
   const [statusMessage, setStatusMessage] = useState('');
   const [statusType, setStatusType] = useState<'success' | 'error' | ''>('');
@@ -134,7 +136,7 @@ const Register: React.FC<RegisterProps> = ({ defaultRole }) => {
             <button
               className={`role-btn ${role === 'customer' ? 'active' : ''}`}
               onClick={() => handleRoleSelect('customer')}
-              disabled={isFormDisabled || defaultRole === 'admin'}
+              disabled={isFormDisabled || adminMode}
             >
               <span className="role-icon">🏠</span>
               <span className="role-label">Customer</span>
@@ -143,13 +145,13 @@ const Register: React.FC<RegisterProps> = ({ defaultRole }) => {
             <button
               className={`role-btn ${role === 'technician' ? 'active' : ''}`}
               onClick={() => handleRoleSelect('technician')}
-              disabled={isFormDisabled || defaultRole === 'admin'}
+              disabled={isFormDisabled || adminMode}
             >
               <span className="role-icon">🔧</span>
               <span className="role-label">Technician</span>
               <span className="role-desc">Accept jobs & earn</span>
             </button>
-            {defaultRole !== 'admin' && (
+            {!adminMode && (
               <span className="register-note">
                 Admin registration is hidden. Use the secret URL if you have access.
               </span>
