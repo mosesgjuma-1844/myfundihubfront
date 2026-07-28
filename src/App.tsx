@@ -28,6 +28,7 @@ import NearbyTechs from "../src/pages/dashboard/CustomerDashboard/nearbytechs/Ne
 import CustomerPayments from "../src/pages/dashboard/CustomerDashboard/payments/Payments";
 import CustomerNotifications from "../src/pages/dashboard/CustomerDashboard/notifications/Notifications";
 import CustomerSettings from "../src/pages/dashboard/CustomerDashboard/settings/Settings";
+import PaymentVerification from "../src/pages/PaymentVerification/PaymentVerification";
 
 //For  Technician Dashbord
 import TechDashboard from "../src/pages/dashboard/TechnicianDashboard/techdashboard/TechDashboard";
@@ -61,6 +62,10 @@ const router = createBrowserRouter([
   {
     path: "/reset-password",
     element: <ResetPassword />,
+  },
+  {
+    path: "/payment/verify",
+    element: <PaymentVerification />,
   },
   {
     path: "/customer-dashboard",

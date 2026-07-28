@@ -42,7 +42,7 @@ const PaymentVerification: React.FC = () => {
 
           // Redirect to bookings after 3 seconds
           setTimeout(() => {
-            navigate('/customer-dashboard?tab=my-bookings');
+            navigate('/customer-dashboard/my-bookings');
           }, 3000);
         } else {
           setStatus('failed');
@@ -97,7 +97,7 @@ const PaymentVerification: React.FC = () => {
             </p>
             <button
               className="action-btn"
-              onClick={() => navigate('/customer-dashboard?tab=my-bookings')}
+              onClick={() => navigate('/customer-dashboard/my-bookings')}
             >
               View My Bookings
             </button>
@@ -122,7 +122,7 @@ const PaymentVerification: React.FC = () => {
             <div className="action-buttons">
               <button
                 className="action-btn primary"
-                onClick={() => navigate('/customer-dashboard?tab=my-bookings')}
+                onClick={() => navigate('/customer-dashboard/my-bookings')}
               >
                 Back to Bookings
               </button>
