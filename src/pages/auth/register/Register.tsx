@@ -17,6 +17,7 @@ interface RegisterFormData {
   confirmPassword: string;
   specialization?: string;
   yearsOfExperience?: number;
+  adminKey?: string;
 }
 
 interface RegisterProps {
@@ -74,12 +75,18 @@ const Register: React.FC<RegisterProps> = ({ defaultRole }) => {
     setIsSubmitting(true);
 
     try {
+      const payload: RegisterFormData & { role: string } = {
+        ...data,
+        role,
+      };
+
+      if (role === 'admin') {
+        payload.adminKey = process.env.REACT_APP_ADMIN_REGISTRATION_KEY || 'Hub@123456';
+      }
+
       const result = await apiPost<{ ok: boolean; message: string; role: string }>(
         '/auth/register/',
-        {
-          ...data,
-          role,
-        },
+        payload,
         false // Don't include auth header for registration
       );
 
