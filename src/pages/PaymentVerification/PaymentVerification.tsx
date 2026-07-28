@@ -2,73 +2,43 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import './PaymentVerification.css';
-import { apiPost } from '../../utils/api';
-
-interface VerifyPaymentResponse {
-  ok: boolean;
-  payment_id: number;
-  status: string;
-  reference: string;
-  message: string;
-}
 
 const PaymentVerification: React.FC = () => {
   const { reference: routeReference } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [status, setStatus] = useState<'verifying' | 'success' | 'failed'>('verifying');
-  const [message, setMessage] = useState('Verifying your payment...');
-  const [details, setDetails] = useState<any>(null);
+  const [status, setStatus] = useState<'pending' | 'success' | 'failed'>('pending');
+  const [message, setMessage] = useState('Processing your payment...');
+  const [details, setDetails] = useState<{ reference?: string | null } | null>(null);
 
   useEffect(() => {
-    const verifyPayment = async () => {
-      try {
-        const reference = routeReference || searchParams.get('reference');
+    const reference = routeReference || searchParams.get('reference') || searchParams.get('trxref');
 
-        if (!reference) {
-          setStatus('failed');
-          setMessage('Payment reference not found');
-          return;
-        }
+    if (!reference) {
+      setStatus('failed');
+      setMessage('Payment reference not found');
+      return;
+    }
 
-        const response = await apiPost<VerifyPaymentResponse>(
-          `/payments/verify/${reference}/`,
-          {}
-        );
+    setDetails({ reference });
+    setStatus('pending');
+    setMessage('Your payment is being processed. We will update your booking automatically once Paystack confirms it.');
 
-        if (response.ok && response.status === 'completed') {
-          setStatus('success');
-          setMessage('Payment verified successfully!');
-          setDetails(response);
+    const redirectTimer = window.setTimeout(() => {
+      navigate('/customer-dashboard/my-bookings');
+    }, 4000);
 
-          // Redirect to bookings after 3 seconds
-          setTimeout(() => {
-            navigate('/customer-dashboard/my-bookings');
-          }, 3000);
-        } else {
-          setStatus('failed');
-          setMessage(response.message || 'Payment verification failed');
-          setDetails(response);
-        }
-      } catch (error) {
-        setStatus('failed');
-        setMessage(
-          error instanceof Error ? error.message : 'Payment verification error'
-        );
-      }
-    };
-
-    verifyPayment();
-  }, [searchParams, navigate]);
+    return () => window.clearTimeout(redirectTimer);
+  }, [navigate, routeReference, searchParams]);
 
   return (
     <div className="payment-verification-page">
       <div className="verification-container">
-        {status === 'verifying' && (
+        {status === 'pending' && (
           <div className="verification-state verifying">
             <div className="spinner"></div>
             <h1>{message}</h1>
-            <p>Please don't close this window</p>
+            <p>Please keep this page open while the payment is being confirmed.</p>
           </div>
         )}
 
@@ -80,16 +50,7 @@ const PaymentVerification: React.FC = () => {
             {details && (
               <div className="payment-details">
                 <p>
-                  <strong>Payment ID:</strong> {details.payment_id}
-                </p>
-                <p>
                   <strong>Reference:</strong> {details.reference}
-                </p>
-                <p>
-                  <strong>Status:</strong>{' '}
-                  <span className="status-badge completed">
-                    {details.status}
-                  </span>
                 </p>
               </div>
             )}
@@ -113,10 +74,7 @@ const PaymentVerification: React.FC = () => {
             {details && (
               <div className="payment-details">
                 <p>
-                  <strong>Status:</strong>{' '}
-                  <span className="status-badge failed">
-                    {details.status || 'Failed'}
-                  </span>
+                  <strong>Reference:</strong> {details.reference}
                 </p>
               </div>
             )}

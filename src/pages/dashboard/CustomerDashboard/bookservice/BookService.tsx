@@ -376,8 +376,8 @@ const BookService: React.FC = () => {
         <PaymentModal
           bookingId={bookingSummary.id}
           calloutFee={calloutFee}
-          onPaymentInitiated={(authorizationUrl) => {
-            window.location.href = authorizationUrl;
+          onPaymentInitiated={() => {
+            setShowPaymentModal(false);
           }}
           onClose={() => {
             setShowPaymentModal(false);

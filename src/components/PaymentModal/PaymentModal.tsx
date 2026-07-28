@@ -31,6 +31,17 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
     setIsLoading(true);
     setError('');
 
+    const popup = window.open(
+      '',
+      'paystackCheckout',
+      'width=430,height=700,left=100,top=100,toolbar=no,menubar=no,location=no,status=no,resizable=yes,scrollbars=yes'
+    );
+
+    if (popup) {
+      popup.document.write('<p>Preparing payment window…</p>');
+      popup.document.close();
+    }
+
     try {
       const response = await apiPost<InitializePaymentResponse>(
         '/payments/initialize/',
@@ -38,12 +49,24 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
       );
 
       if (response.ok && response.authorization_url) {
-        // Redirect to Paystack
+        if (popup && !popup.closed) {
+          popup.location.href = response.authorization_url;
+          popup.focus();
+        } else {
+          window.location.assign(response.authorization_url);
+        }
+
         onPaymentInitiated(response.authorization_url);
       } else {
+        if (popup && !popup.closed) {
+          popup.close();
+        }
         setError(response.message || 'Failed to initialize payment');
       }
     } catch (err) {
+      if (popup && !popup.closed) {
+        popup.close();
+      }
       setError(
         err instanceof Error ? err.message : 'Payment initialization failed'
       );

@@ -156,8 +156,9 @@ const MyBookings: React.FC = () => {
         <PaymentModal
           bookingId={selectedBookingForPayment.id}
           calloutFee={resolveCalloutFee(selectedBookingForPayment)}
-          onPaymentInitiated={(authorizationUrl) => {
-            window.location.href = authorizationUrl;
+          onPaymentInitiated={() => {
+            setShowPaymentModal(false);
+            setSelectedBookingForPayment(null);
           }}
           onClose={() => {
             setShowPaymentModal(false);
