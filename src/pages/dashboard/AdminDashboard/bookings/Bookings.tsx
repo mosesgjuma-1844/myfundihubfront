@@ -121,8 +121,8 @@ const Bookings: React.FC = () => {
 
       <div className="bookings-filters">
         <div className="filter-group">
-          <label>Status</label>
-          <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+          <label htmlFor="statusFilter">Status</label>
+          <select id="statusFilter" name="statusFilter" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
             <option value="">All statuses</option>
             {statusOptions.map((option) => (
               <option key={option} value={option}>
@@ -133,8 +133,8 @@ const Bookings: React.FC = () => {
         </div>
 
         <div className="filter-group">
-          <label>Service</label>
-          <select value={serviceFilter} onChange={(e) => setServiceFilter(e.target.value)}>
+          <label htmlFor="serviceFilter">Service</label>
+          <select id="serviceFilter" name="serviceFilter" value={serviceFilter} onChange={(e) => setServiceFilter(e.target.value)}>
             <option value="">All services</option>
             {serviceOptions.map((option) => (
               <option key={option} value={option}>
@@ -145,8 +145,8 @@ const Bookings: React.FC = () => {
         </div>
 
         <div className="filter-group">
-          <label>Technician</label>
-          <select value={technicianFilter} onChange={(e) => setTechnicianFilter(e.target.value)}>
+          <label htmlFor="technicianFilter">Technician</label>
+          <select id="technicianFilter" name="technicianFilter" value={technicianFilter} onChange={(e) => setTechnicianFilter(e.target.value)}>
             <option value="">All technicians</option>
             {technicians.map((tech) => (
               <option key={tech.id} value={tech.id.toString()}>{tech.name}</option>
@@ -155,8 +155,10 @@ const Bookings: React.FC = () => {
         </div>
 
         <div className="filter-group search-group">
-          <label>Search</label>
+          <label htmlFor="searchTerm">Search</label>
           <input
+            id="searchTerm"
+            name="searchTerm"
             type="search"
             placeholder="Search by customer, location or description"
             value={searchTerm}

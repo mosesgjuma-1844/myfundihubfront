@@ -77,14 +77,17 @@ const ResetPassword: React.FC = () => {
 
           <form className="reset-password-form" onSubmit={handleReset}>
             <div className="form-group">
-              <label className="form-label">New Password</label>
+              <label className="form-label" htmlFor="newPassword">New Password</label>
               <div className="password-wrapper">
                 <input
+                  id="newPassword"
+                  name="newPassword"
                   type={showPassword ? 'text' : 'password'}
                   className="form-input password-input"
                   placeholder="Enter new password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
+                  autoComplete="new-password"
                   required
                 />
                 <button
@@ -115,14 +118,17 @@ const ResetPassword: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Confirm Password</label>
+              <label className="form-label" htmlFor="confirmPassword">Confirm Password</label>
               <div className="password-wrapper">
                 <input
+                  id="confirmPassword"
+                  name="confirmPassword"
                   type={showPassword ? 'text' : 'password'}
                   className="form-input password-input"
                   placeholder="Confirm new password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
+                  autoComplete="new-password"
                   required
                 />
               </div>

@@ -36,8 +36,9 @@ const Settings: React.FC = () => {
           <h2 className="section-title">Profile Information</h2>
           <form className="settings-form" onSubmit={handleSubmit}>
             <div className="form-group">
-              <label className="form-label">Full Name</label>
+              <label className="form-label" htmlFor="technicianName">Full Name</label>
               <input
+                id="technicianName"
                 type="text"
                 name="name"
                 className="form-input"
@@ -47,8 +48,9 @@ const Settings: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Email</label>
+              <label className="form-label" htmlFor="technicianEmail">Email</label>
               <input
+                id="technicianEmail"
                 type="email"
                 name="email"
                 className="form-input"
@@ -58,8 +60,9 @@ const Settings: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Phone Number</label>
+              <label className="form-label" htmlFor="technicianPhone">Phone Number</label>
               <input
+                id="technicianPhone"
                 type="tel"
                 name="phone"
                 className="form-input"
@@ -69,8 +72,9 @@ const Settings: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Location</label>
+              <label className="form-label" htmlFor="technicianLocation">Location</label>
               <input
+                id="technicianLocation"
                 type="text"
                 name="location"
                 className="form-input"
@@ -80,8 +84,9 @@ const Settings: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Specialization</label>
+              <label className="form-label" htmlFor="technicianSpecialization">Specialization</label>
               <select
+                id="technicianSpecialization"
                 name="specialization"
                 className="form-input"
                 value={profileData.specialization}
@@ -96,8 +101,9 @@ const Settings: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Years of Experience</label>
+              <label className="form-label" htmlFor="technicianExperience">Years of Experience</label>
               <input
+                id="technicianExperience"
                 type="text"
                 name="experience"
                 className="form-input"

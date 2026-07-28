@@ -155,11 +155,13 @@ const Register: React.FC = () => {
           <form className="register-form" onSubmit={handleSubmit(onSubmit)}>
             <div className="form-row">
               <div className="form-group">
-                <label className="form-label">First Name</label>
+                <label className="form-label" htmlFor="firstName">First Name</label>
                 <input
+                  id="firstName"
                   type="text"
                   className={`form-input ${errors.firstName ? 'error' : ''}`}
                   placeholder="Jane"
+                  autoComplete="given-name"
                   disabled={isFormDisabled}
                   {...register('firstName', {
                     required: 'First name is required',
@@ -175,11 +177,13 @@ const Register: React.FC = () => {
               </div>
 
               <div className="form-group">
-                <label className="form-label">Last Name</label>
+                <label className="form-label" htmlFor="lastName">Last Name</label>
                 <input
+                  id="lastName"
                   type="text"
                   className={`form-input ${errors.lastName ? 'error' : ''}`}
                   placeholder="Wanjiku"
+                  autoComplete="family-name"
                   disabled={isFormDisabled}
                   {...register('lastName', {
                     required: 'Last name is required',
@@ -196,11 +200,13 @@ const Register: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Email</label>
+              <label className="form-label" htmlFor="email">Email</label>
               <input
+                id="email"
                 type="email"
                 className={`form-input ${errors.email ? 'error' : ''}`}
                 placeholder="jane@email.com"
+                autoComplete="email"
                 disabled={isFormDisabled}
                 {...register('email', {
                   required: 'Email is required',
@@ -216,11 +222,13 @@ const Register: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Confirm Email</label>
+              <label className="form-label" htmlFor="confirmEmail">Confirm Email</label>
               <input
+                id="confirmEmail"
                 type="email"
                 className={`form-input ${errors.confirmEmail ? 'error' : ''}`}
                 placeholder="Re-enter email"
+                autoComplete="email"
                 disabled={isFormDisabled}
                 {...register('confirmEmail', {
                   required: 'Please confirm your email',
@@ -234,11 +242,13 @@ const Register: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Phone Number</label>
+              <label className="form-label" htmlFor="phoneNumber">Phone Number</label>
               <input
+                id="phoneNumber"
                 type="tel"
                 className={`form-input ${errors.phoneNumber ? 'error' : ''}`}
                 placeholder="0782345678"
+                autoComplete="tel"
                 disabled={isFormDisabled}
                 {...register('phoneNumber', {
                   required: 'Phone number is required',
@@ -254,11 +264,13 @@ const Register: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Username</label>
+              <label className="form-label" htmlFor="username">Username</label>
               <input
+                id="username"
                 type="text"
                 className={`form-input ${errors.username ? 'error' : ''}`}
                 placeholder="jane_wanjiku"
+                autoComplete="username"
                 disabled={isFormDisabled}
                 {...register('username', {
                   required: 'Username is required',
@@ -276,8 +288,9 @@ const Register: React.FC = () => {
             {role === 'technician' && (
               <>
                 <div className="form-group">
-                  <label className="form-label">Specialization</label>
+                  <label className="form-label" htmlFor="specialization">Specialization</label>
                   <select
+                    id="specialization"
                     className={`form-input ${errors.specialization ? 'error' : ''}`}
                     disabled={isFormDisabled}
                     {...register('specialization', {
@@ -298,8 +311,9 @@ const Register: React.FC = () => {
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label">Years of Experience</label>
+                  <label className="form-label" htmlFor="yearsOfExperience">Years of Experience</label>
                   <input
+                    id="yearsOfExperience"
                     type="number"
                     className={`form-input ${errors.yearsOfExperience ? 'error' : ''}`}
                     placeholder="Enter years of experience"
@@ -326,11 +340,13 @@ const Register: React.FC = () => {
             {/* Admin access removed from public registration */}
 
             <div className="form-group">
-              <label className="form-label">Password</label>
+              <label className="form-label" htmlFor="password">Password</label>
               <input
+                id="password"
                 type="password"
                 className={`form-input ${errors.password ? 'error' : ''}`}
                 placeholder="Enter password"
+                autoComplete="new-password"
                 disabled={isFormDisabled}
                 {...register('password', {
                   required: 'Password is required',
@@ -346,11 +362,13 @@ const Register: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Confirm Password</label>
+              <label className="form-label" htmlFor="confirmPassword">Confirm Password</label>
               <input
+                id="confirmPassword"
                 type="password"
                 className={`form-input ${errors.confirmPassword ? 'error' : ''}`}
                 placeholder="Confirm password"
+                autoComplete="new-password"
                 disabled={isFormDisabled}
                 {...register('confirmPassword', {
                   required: 'Please confirm your password',

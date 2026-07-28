@@ -61,8 +61,9 @@ const Settings: React.FC = () => {
           <h2 className="section-title">Profile Information</h2>
           <form className="settings-form" onSubmit={handleSubmit}>
             <div className="form-group">
-              <label className="form-label">Full Name</label>
+              <label className="form-label" htmlFor="customerName">Full Name</label>
               <input
+                id="customerName"
                 type="text"
                 name="name"
                 className="form-input"
@@ -72,8 +73,9 @@ const Settings: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Email</label>
+              <label className="form-label" htmlFor="customerEmail">Email</label>
               <input
+                id="customerEmail"
                 type="email"
                 name="email"
                 className="form-input"
@@ -83,8 +85,9 @@ const Settings: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Phone Number</label>
+              <label className="form-label" htmlFor="customerPhone">Phone Number</label>
               <input
+                id="customerPhone"
                 type="tel"
                 name="phone"
                 className="form-input"
@@ -94,8 +97,9 @@ const Settings: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Location</label>
+              <label className="form-label" htmlFor="customerLocation">Location</label>
               <input
+                id="customerLocation"
                 type="text"
                 name="location"
                 className="form-input"

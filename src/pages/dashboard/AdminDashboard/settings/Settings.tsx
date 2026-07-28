@@ -35,8 +35,9 @@ const Settings: React.FC = () => {
           <h2 className="section-title">General Settings</h2>
           <form className="settings-form" onSubmit={handleSubmit}>
             <div className="form-group">
-              <label className="form-label">Site Name</label>
+              <label className="form-label" htmlFor="siteName">Site Name</label>
               <input
+                id="siteName"
                 type="text"
                 name="siteName"
                 className="form-input"
@@ -46,8 +47,9 @@ const Settings: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Support Email</label>
+              <label className="form-label" htmlFor="supportEmail">Support Email</label>
               <input
+                id="supportEmail"
                 type="email"
                 name="supportEmail"
                 className="form-input"
@@ -66,8 +68,9 @@ const Settings: React.FC = () => {
           <h2 className="section-title">Commission & Payout Settings</h2>
           <form className="settings-form" onSubmit={handleSubmit}>
             <div className="form-group">
-              <label className="form-label">Commission Rate (%)</label>
+              <label className="form-label" htmlFor="commissionRate">Commission Rate (%)</label>
               <input
+                id="commissionRate"
                 type="number"
                 name="commissionRate"
                 className="form-input"
@@ -77,8 +80,9 @@ const Settings: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Minimum Payout (KSh)</label>
+              <label className="form-label" htmlFor="minPayout">Minimum Payout (KSh)</label>
               <input
+                id="minPayout"
                 type="number"
                 name="minPayout"
                 className="form-input"
@@ -88,8 +92,9 @@ const Settings: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label className="form-label">Maximum Service Radius (km)</label>
+              <label className="form-label" htmlFor="maxRadius">Maximum Service Radius (km)</label>
               <input
+                id="maxRadius"
                 type="number"
                 name="maxRadius"
                 className="form-input"

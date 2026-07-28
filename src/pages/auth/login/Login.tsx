@@ -115,26 +115,32 @@ const Login: React.FC = () => {
 
           <form className="login-form" onSubmit={handleLogin}>
             <div className="form-group">
-              <label className="form-label">Email</label>
+              <label className="form-label" htmlFor="login-email">Email</label>
               <input 
+                id="login-email"
+                name="email"
                 type="email" 
                 className="form-input" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@email.com"
+                autoComplete="email"
                 disabled={isLoading}
               />
             </div>
 
             <div className="form-group">
-              <label className="form-label">Password</label>
+              <label className="form-label" htmlFor="login-password">Password</label>
               <div className="password-wrapper">
                 <input 
+                  id="login-password"
+                  name="password"
                   type={showPassword ? 'text' : 'password'} 
                   className="form-input password-input" 
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
+                  autoComplete="current-password"
                   disabled={isLoading}
                 />
                 <button 
@@ -149,8 +155,10 @@ const Login: React.FC = () => {
             </div>
 
             <div className="form-options">
-              <label className="checkbox-label">
+              <label className="checkbox-label" htmlFor="remember-me">
                 <input 
+                  id="remember-me"
+                  name="rememberMe"
                   type="checkbox" 
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}

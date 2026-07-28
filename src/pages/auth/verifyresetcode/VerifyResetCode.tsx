@@ -94,17 +94,24 @@ const VerifyResetCode: React.FC = () => {
           <form className="verify-code-form" onSubmit={handleVerify}>
             <div className="code-input-group">
               {code.map((digit, index) => (
-                <input
-                  key={index}
-                  id={`code-${index}`}
-                  type="text"
-                  className="code-input"
-                  maxLength={1}
-                  value={digit}
-                  onChange={(e) => handleCodeChange(index, e.target.value)}
-                  onKeyDown={(e) => handleKeyDown(index, e)}
-                  autoFocus={index === 0}
-                />
+                <div key={index}>
+                  <label htmlFor={`code-${index}`} style={{ position: 'absolute', left: '-9999px' }}>
+                    Verification code digit {index + 1}
+                  </label>
+                  <input
+                    id={`code-${index}`}
+                    name={`code-${index}`}
+                    type="text"
+                    className="code-input"
+                    maxLength={1}
+                    inputMode="numeric"
+                    autoComplete="one-time-code"
+                    value={digit}
+                    onChange={(e) => handleCodeChange(index, e.target.value)}
+                    onKeyDown={(e) => handleKeyDown(index, e)}
+                    autoFocus={index === 0}
+                  />
+                </div>
               ))}
             </div>
 

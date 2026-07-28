@@ -208,8 +208,10 @@ const BookService: React.FC = () => {
 
       <form className="booking-form" onSubmit={handleSubmit}>
         <div className="form-group">
-          <label className="form-label">Service Type</label>
+          <label className="form-label" htmlFor="serviceType">Service Type</label>
           <select 
+            id="serviceType"
+            name="serviceType"
             className="form-select" 
             value={serviceType}
             onChange={(e) => setServiceType(e.target.value)}
@@ -228,6 +230,8 @@ const BookService: React.FC = () => {
           <label className="form-label">Service Location</label>
           <div className="location-input-wrapper">
             <input
+              id="serviceLocation"
+              name="serviceLocation"
               type="text"
               className="form-input"
               placeholder="Enter your street/building address"
@@ -242,8 +246,10 @@ const BookService: React.FC = () => {
 
           <div className="address-grid">
             <div className="form-group">
-              <label>County *</label>
+              <label htmlFor="county">County *</label>
               <input
+                id="county"
+                name="county"
                 type="text"
                 className="form-input"
                 placeholder="e.g. Nairobi"
@@ -254,8 +260,10 @@ const BookService: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label>Town / Estate *</label>
+              <label htmlFor="townOrEstate">Town / Estate *</label>
               <input
+                id="townOrEstate"
+                name="townOrEstate"
                 type="text"
                 className="form-input"
                 placeholder="e.g. Kilimani"
@@ -266,8 +274,10 @@ const BookService: React.FC = () => {
             </div>
 
             <div className="form-group full-width">
-              <label>Nearest Landmark</label>
+              <label htmlFor="landmark">Nearest Landmark</label>
               <input
+                id="landmark"
+                name="landmark"
                 type="text"
                 className="form-input"
                 placeholder="e.g. Opposite Yaya Centre"
@@ -299,8 +309,10 @@ const BookService: React.FC = () => {
 
         <div className="form-row">
           <div className="form-group">
-            <label className="form-label">Date</label>
+            <label className="form-label" htmlFor="scheduledDate">Date</label>
             <input
+              id="scheduledDate"
+              name="scheduledDate"
               type="date"
               className="form-input"
               value={scheduledDate}
@@ -310,8 +322,10 @@ const BookService: React.FC = () => {
             />
           </div>
           <div className="form-group">
-            <label className="form-label">Time</label>
+            <label className="form-label" htmlFor="scheduledTime">Time</label>
             <input
+              id="scheduledTime"
+              name="scheduledTime"
               type="time"
               className="form-input"
               value={scheduledTime}
@@ -323,8 +337,10 @@ const BookService: React.FC = () => {
         </div>
 
         <div className="form-group">
-          <label className="form-label">Description</label>
+          <label className="form-label" htmlFor="description">Description</label>
           <textarea
+            id="description"
+            name="description"
             className="form-textarea"
             placeholder="Describe what you need fixed..."
             value={description}
