@@ -14,6 +14,31 @@ export interface StoredTokens extends Tokens {
 const TOKEN_STORAGE_KEY = 'fundiTokens';
 const TOKEN_EXPIRY_BUFFER = 5 * 60 * 1000; // 5 minutes before actual expiry
 
+function normalizeTokens(input: unknown): Tokens | null {
+  if (!input || typeof input !== 'object') return null;
+
+  const candidate = input as Record<string, unknown>;
+  const access =
+    (candidate.access as string | undefined) ??
+    (candidate.access_token as string | undefined) ??
+    (candidate.accessToken as string | undefined) ??
+    (candidate.token as string | undefined) ??
+    null;
+
+  const refresh =
+    (candidate.refresh as string | undefined) ??
+    (candidate.refresh_token as string | undefined) ??
+    (candidate.refreshToken as string | undefined) ??
+    null;
+
+  if (!access) return null;
+
+  return {
+    access,
+    refresh: refresh || '',
+  };
+}
+
 /**
  * Decode JWT token to get payload (without verification - for expiry check only)
  * @param token JWT token string
@@ -60,11 +85,14 @@ export function isTokenExpired(token: string): boolean {
  * @param tokens Tokens object with access and refresh tokens
  */
 export function storeTokens(tokens: Tokens): void {
-  const accessPayload = decodeToken(tokens.access);
+  const normalizedTokens = normalizeTokens(tokens);
+  if (!normalizedTokens) return;
+
+  const accessPayload = decodeToken(normalizedTokens.access);
   const expiresAt = accessPayload?.exp ? accessPayload.exp * 1000 : Date.now() + 60 * 60 * 1000;
 
   const storedTokens: StoredTokens = {
-    ...tokens,
+    ...normalizedTokens,
     expiresAt,
   };
 
@@ -80,8 +108,15 @@ export function getAccessToken(): string | null {
   if (!stored) return null;
 
   try {
-    const tokens: StoredTokens = JSON.parse(stored);
-    return tokens.access || null;
+    const parsed = JSON.parse(stored) as Partial<StoredTokens> & Record<string, unknown>;
+    const access =
+      (parsed.access as string | undefined) ??
+      (parsed.access_token as string | undefined) ??
+      (parsed.accessToken as string | undefined) ??
+      (parsed.token as string | undefined) ??
+      null;
+
+    return access || null;
   } catch {
     return null;
   }
@@ -96,8 +131,14 @@ export function getRefreshToken(): string | null {
   if (!stored) return null;
 
   try {
-    const tokens: StoredTokens = JSON.parse(stored);
-    return tokens.refresh || null;
+    const parsed = JSON.parse(stored) as Partial<StoredTokens> & Record<string, unknown>;
+    const refresh =
+      (parsed.refresh as string | undefined) ??
+      (parsed.refresh_token as string | undefined) ??
+      (parsed.refreshToken as string | undefined) ??
+      null;
+
+    return refresh || null;
   } catch {
     return null;
   }
@@ -112,7 +153,14 @@ export function getStoredTokens(): StoredTokens | null {
   if (!stored) return null;
 
   try {
-    return JSON.parse(stored);
+    const parsed = JSON.parse(stored) as Partial<StoredTokens> & Record<string, unknown>;
+    const normalized = normalizeTokens(parsed);
+    if (!normalized) return null;
+
+    return {
+      ...normalized,
+      expiresAt: (parsed.expiresAt as number | undefined) ?? Date.now() + 60 * 60 * 1000,
+    };
   } catch {
     return null;
   }
@@ -163,9 +211,10 @@ export function updateTokens(newTokens: Partial<Tokens>): void {
   const current = getStoredTokens();
   if (!current) return;
 
+  const normalizedNewTokens = normalizeTokens(newTokens);
   const updated: StoredTokens = {
     ...current,
-    ...newTokens,
+    ...(normalizedNewTokens || {}),
   };
 
   const accessPayload = decodeToken(updated.access);
