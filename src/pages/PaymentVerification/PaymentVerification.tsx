@@ -1,6 +1,7 @@
 // pages/PaymentVerification/PaymentVerification.tsx
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { apiGet } from '../../utils/api';
 import './PaymentVerification.css';
 
 const PaymentVerification: React.FC = () => {
@@ -12,17 +13,42 @@ const PaymentVerification: React.FC = () => {
   const [details, setDetails] = useState<{ reference?: string | null } | null>(null);
 
   useEffect(() => {
-    const reference = routeReference || searchParams.get('reference') || searchParams.get('trxref');
+    const paystackReference = searchParams.get('reference') || searchParams.get('trxref') || routeReference;
 
-    if (!reference) {
+    if (!paystackReference) {
       setStatus('failed');
-      setMessage('Payment reference not found');
+      setMessage('Payment reference not found. Please try again or contact support.');
       return;
     }
 
-    setDetails({ reference });
+    setDetails({ reference: paystackReference });
     setStatus('pending');
-    setMessage('Your payment is being processed. We will update your booking automatically once Paystack confirms it.');
+    setMessage('Verifying your payment with Paystack. Please keep this page open.');
+
+    const verifyPayment = async () => {
+      try {
+        const response = await apiGet<{ ok: boolean; status: string; message: string }>(
+          `/payments/verify/${encodeURIComponent(paystackReference)}/`
+        );
+
+        if (response.ok) {
+          setStatus('success');
+          setMessage('Payment verified successfully. Your booking is now active.');
+        } else {
+          setStatus('failed');
+          setMessage(response.message || 'Payment could not be verified yet.');
+        }
+      } catch (error) {
+        setStatus('failed');
+        setMessage(
+          error instanceof Error
+            ? error.message
+            : 'Payment verification failed. Please refresh or check your bookings later.'
+        );
+      }
+    };
+
+    verifyPayment();
 
     const redirectTimer = window.setTimeout(() => {
       navigate('/customer-dashboard/my-bookings');

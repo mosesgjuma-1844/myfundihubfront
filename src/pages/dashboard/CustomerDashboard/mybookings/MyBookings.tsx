@@ -23,6 +23,37 @@ const MyBookings: React.FC = () => {
 
   const tabs = ['All', 'Active', 'Completed', 'Cancelled'];
 
+  const fetchBookings = async () => {
+    setError('');
+
+    const storedUser = localStorage.getItem('fundiUser');
+    let parsedUser: StoredUser | null = null;
+
+    if (storedUser) {
+      try {
+        parsedUser = JSON.parse(storedUser) as StoredUser;
+      } catch {
+        parsedUser = null;
+      }
+    }
+
+    const customerId = parsedUser?.id ?? parsedUser?.userId ?? parsedUser?.customerId ?? null;
+
+    try {
+      const bookingsPath = customerId ? `/bookings/?customer_id=${customerId}` : '/bookings/';
+      const data = await apiGet<{ bookings: BookingSummary[] }>(bookingsPath);
+      const allBookings = data.bookings || [];
+      const filteredBookings = customerId
+        ? allBookings.filter((booking) => booking.customer?.id === customerId)
+        : allBookings;
+      setBookings(filteredBookings);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unable to load your bookings');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const resolveCalloutFee = (booking: BookingSummary | null | undefined): number => {
     const rawValue = booking?.calloutFee ?? booking?.callout_fee;
 
@@ -41,36 +72,29 @@ const MyBookings: React.FC = () => {
   };
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('fundiUser');
-    let parsedUser: StoredUser | null = null;
+    const fetchBookingsOnFocus = async () => {
+      setLoading(true);
+      await fetchBookings();
+    };
 
-    if (storedUser) {
-      try {
-        parsedUser = JSON.parse(storedUser) as StoredUser;
-      } catch {
-        parsedUser = null;
-      }
-    }
-
-    const customerId = parsedUser?.id ?? parsedUser?.userId ?? parsedUser?.customerId ?? null;
-
-    const fetchBookings = async () => {
-      try {
-        const bookingsPath = customerId ? `/bookings/?customer_id=${customerId}` : '/bookings/';
-        const data = await apiGet<{ bookings: BookingSummary[] }>(bookingsPath);
-        const allBookings = data.bookings || [];
-        const filteredBookings = customerId
-          ? allBookings.filter((booking) => booking.customer?.id === customerId)
-          : allBookings;
-        setBookings(filteredBookings);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Unable to load your bookings');
-      } finally {
-        setLoading(false);
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        fetchBookingsOnFocus();
       }
     };
 
+    const handleWindowFocus = () => {
+      fetchBookingsOnFocus();
+    };
+
     fetchBookings();
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('focus', handleWindowFocus);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('focus', handleWindowFocus);
+    };
   }, []);
 
   const filteredBookings = useMemo(() => {
