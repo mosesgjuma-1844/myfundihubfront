@@ -64,7 +64,7 @@ const router = createBrowserRouter([
     element: <ResetPassword />,
   },
   {
-    path: "/payment/verify",
+    path: "/payment/verify/:reference?",
     element: <PaymentVerification />,
   },
   {

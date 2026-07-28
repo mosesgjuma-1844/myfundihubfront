@@ -1,6 +1,6 @@
 // pages/PaymentVerification/PaymentVerification.tsx
 import React, { useEffect, useState } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import './PaymentVerification.css';
 import { apiPost } from '../../utils/api';
 
@@ -13,6 +13,7 @@ interface VerifyPaymentResponse {
 }
 
 const PaymentVerification: React.FC = () => {
+  const { reference: routeReference } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [status, setStatus] = useState<'verifying' | 'success' | 'failed'>('verifying');
@@ -22,7 +23,7 @@ const PaymentVerification: React.FC = () => {
   useEffect(() => {
     const verifyPayment = async () => {
       try {
-        const reference = searchParams.get('reference');
+        const reference = routeReference || searchParams.get('reference');
 
         if (!reference) {
           setStatus('failed');
