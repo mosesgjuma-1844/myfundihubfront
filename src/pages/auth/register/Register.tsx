@@ -80,12 +80,10 @@ const Register: React.FC<RegisterProps> = ({ defaultRole }) => {
         role,
       };
 
-      if (role === 'admin') {
-        payload.adminKey = process.env.REACT_APP_ADMIN_REGISTRATION_KEY || 'Hub@123456';
-      }
+      const endpoint = role === 'admin' ? '/auth/admin-register/' : '/auth/register/';
 
       const result = await apiPost<{ ok: boolean; message: string; role: string }>(
-        '/auth/register/',
+        endpoint,
         payload,
         false // Don't include auth header for registration
       );
@@ -363,7 +361,28 @@ const Register: React.FC<RegisterProps> = ({ defaultRole }) => {
               </>
             )}
 
-            {/* Admin access removed from public registration */}
+            {role === 'admin' && (
+              <div className="form-group">
+                <label className="form-label" htmlFor="adminKey">Admin Registration Key</label>
+                <input
+                  id="adminKey"
+                  type="password"
+                  className={`form-input ${errors.adminKey ? 'error' : ''}`}
+                  placeholder="Enter the admin registration key"
+                  autoComplete="off"
+                  disabled={isFormDisabled}
+                  {...register('adminKey', {
+                    required: 'Admin registration key is required',
+                  })}
+                />
+                {errors.adminKey && (
+                  <span className="error-message">{errors.adminKey.message}</span>
+                )}
+                <p className="field-hint">
+                  Use the secret admin key provided for hidden admin registration.
+                </p>
+              </div>
+            )}
 
             <div className="form-group">
               <label className="form-label" htmlFor="password">Password</label>

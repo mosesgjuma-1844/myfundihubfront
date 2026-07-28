@@ -1,0 +1,7 @@
+src\components\PaymentModal\PaymentModal.tsx:130:              {isLoading ? 'Processing...' : 'Pay Now'}
+src\components\services\Services.tsx:22:      fullDescription: 'Get professional installation services for home fixtures and appliances, including CCTV systems, ceiling fans, lighting fixtures, and more. Our skilled technicians ensure a seamless and efficient installation process.',
+src\components\testmonies\Testmonies.tsx:36:      text: "I had a plumbing emergency at 7 am and within 20 minutes a technician was at my door. The whole process — booking, tracking, and paying — was completely seamless.",
+src\pages\dashboard\CustomerDashboard\payments\Payments.tsx:33:  const filters = ['All', 'Successful', 'Pending', 'Processing', 'Failed'];
+src\pages\dashboard\CustomerDashboard\payments\Payments.tsx:96:      case 'processing':
+src\pages\dashboard\CustomerDashboard\payments\Payments.tsx:97:        return 'processing';
+src\pages\PaymentVerification\PaymentVerification.tsx:12:  const [message, setMessage] = useState('Processing your payment...');
