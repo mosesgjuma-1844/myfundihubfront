@@ -88,11 +88,8 @@ function buildHeaders(includeAuth = true): HeadersInit {
 
   if (includeAuth) {
     const authHeader = getAuthorizationHeader();
-    const token = authHeader?.replace(/^Bearer\s+/i, '');
-    if (authHeader && token) {
+    if (authHeader) {
       headers['Authorization'] = authHeader;
-      headers['X-Access-Token'] = token;
-      headers['X-Auth-Token'] = token;
     }
   }
 
