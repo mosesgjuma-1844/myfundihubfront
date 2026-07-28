@@ -19,8 +19,14 @@ interface RegisterFormData {
   yearsOfExperience?: number;
 }
 
-const Register: React.FC = () => {
-  const [role, setRole] = useState<'customer' | 'technician'>('customer');
+interface RegisterProps {
+  defaultRole?: 'customer' | 'technician' | 'admin';
+}
+
+const Register: React.FC<RegisterProps> = ({ defaultRole }) => {
+  const [role, setRole] = useState<'customer' | 'technician' | 'admin'>(
+    defaultRole || 'customer'
+  );
   const [statusMessage, setStatusMessage] = useState('');
   const [statusType, setStatusType] = useState<'success' | 'error' | ''>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -102,7 +108,7 @@ const Register: React.FC = () => {
     navigate('/login');
   };
 
-  const handleRoleSelect = (selectedRole: 'customer' | 'technician') => {
+  const handleRoleSelect = (selectedRole: 'customer' | 'technician' | 'admin') => {
     setRole(selectedRole);
   };
 
@@ -128,7 +134,7 @@ const Register: React.FC = () => {
             <button
               className={`role-btn ${role === 'customer' ? 'active' : ''}`}
               onClick={() => handleRoleSelect('customer')}
-              disabled={isFormDisabled}
+              disabled={isFormDisabled || defaultRole === 'admin'}
             >
               <span className="role-icon">🏠</span>
               <span className="role-label">Customer</span>
@@ -137,17 +143,28 @@ const Register: React.FC = () => {
             <button
               className={`role-btn ${role === 'technician' ? 'active' : ''}`}
               onClick={() => handleRoleSelect('technician')}
-              disabled={isFormDisabled}
+              disabled={isFormDisabled || defaultRole === 'admin'}
             >
               <span className="role-icon">🔧</span>
               <span className="role-label">Technician</span>
               <span className="role-desc">Accept jobs & earn</span>
             </button>
-            {/* Admin registration removed to prevent public admin account creation */}
+            {defaultRole !== 'admin' && (
+              <span className="register-note">
+                Admin registration is hidden. Use the secret URL if you have access.
+              </span>
+            )}
           </div>
+          {defaultRole === 'admin' && (
+            <div className="admin-notice">
+              <p>Admin registration is enabled on this hidden URL.</p>
+            </div>
+          )}
 
           <p className="role-hint">
-            {role === 'customer'
+            {role === 'admin'
+              ? 'Registering as an admin account. This page is hidden and should not be shared publicly.'
+              : role === 'customer'
               ? 'Need to book a service? Select Customer above.'
               : 'Joining as a technician? Select Technician above.'}
           </p>

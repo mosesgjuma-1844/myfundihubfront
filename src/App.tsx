@@ -52,6 +52,10 @@ const router = createBrowserRouter([
     element: <Register />,
   },
   {
+    path: "/register/admin",
+    element: <Register defaultRole="admin" />,
+  },
+  {
     path: "/forgot-password",
     element: <ForgotPassword />,
   },
