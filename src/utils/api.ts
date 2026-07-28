@@ -88,8 +88,11 @@ function buildHeaders(includeAuth = true): HeadersInit {
 
   if (includeAuth) {
     const authHeader = getAuthorizationHeader();
-    if (authHeader) {
+    const token = authHeader?.replace(/^Bearer\s+/i, '');
+    if (authHeader && token) {
       headers['Authorization'] = authHeader;
+      headers['X-Access-Token'] = token;
+      headers['X-Auth-Token'] = token;
     }
   }
 
@@ -116,6 +119,7 @@ export async function apiGet<T>(path: string, includeAuth = true): Promise<T> {
     const response = await fetch(`${APIDomain}${path}`, {
       method: 'GET',
       headers: buildHeaders(includeAuth),
+      credentials: 'include',
     });
 
     const data = await response.json();
@@ -146,6 +150,7 @@ export async function apiPost<T>(path: string, payload: unknown, includeAuth = t
       method: 'POST',
       headers: buildHeaders(includeAuth),
       body: JSON.stringify(payload),
+      credentials: 'include',
     });
 
     const data = await response.json();
@@ -181,6 +186,7 @@ export async function apiLogin<T extends LoginResponse>(path: string, payload: u
       method: 'POST',
       headers: buildHeaders(false),
       body: JSON.stringify(payload),
+      credentials: 'include',
     });
 
     const data = await response.json();

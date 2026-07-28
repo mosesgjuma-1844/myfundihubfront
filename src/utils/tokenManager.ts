@@ -12,6 +12,7 @@ export interface StoredTokens extends Tokens {
 }
 
 const TOKEN_STORAGE_KEY = 'fundiTokens';
+const LEGACY_TOKEN_STORAGE_KEYS = ['fundiAuthTokens', 'authTokens', 'accessToken', 'token'];
 const TOKEN_EXPIRY_BUFFER = 5 * 60 * 1000; // 5 minutes before actual expiry
 
 function normalizeTokens(input: unknown): Tokens | null {
@@ -97,6 +98,9 @@ export function storeTokens(tokens: Tokens): void {
   };
 
   localStorage.setItem(TOKEN_STORAGE_KEY, JSON.stringify(storedTokens));
+  localStorage.setItem('fundiAuthTokens', JSON.stringify(storedTokens));
+  localStorage.setItem('accessToken', tokens.access);
+  localStorage.setItem('token', tokens.access);
 }
 
 /**
@@ -104,22 +108,36 @@ export function storeTokens(tokens: Tokens): void {
  * @returns Access token string or null if not found
  */
 export function getAccessToken(): string | null {
-  const stored = localStorage.getItem(TOKEN_STORAGE_KEY);
-  if (!stored) return null;
+  for (const key of [TOKEN_STORAGE_KEY, ...LEGACY_TOKEN_STORAGE_KEYS]) {
+    const stored = localStorage.getItem(key);
+    if (!stored) continue;
 
-  try {
-    const parsed = JSON.parse(stored) as Partial<StoredTokens> & Record<string, unknown>;
-    const access =
-      (parsed.access as string | undefined) ??
-      (parsed.access_token as string | undefined) ??
-      (parsed.accessToken as string | undefined) ??
-      (parsed.token as string | undefined) ??
-      null;
+    try {
+      const parsed = JSON.parse(stored);
+      if (typeof parsed === 'string') {
+        return parsed || null;
+      }
 
-    return access || null;
-  } catch {
-    return null;
+      if (parsed && typeof parsed === 'object') {
+        const access =
+          (parsed.access as string | undefined) ??
+          (parsed.access_token as string | undefined) ??
+          (parsed.accessToken as string | undefined) ??
+          (parsed.token as string | undefined) ??
+          null;
+
+        if (access) {
+          return access;
+        }
+      }
+    } catch {
+      if (stored.startsWith('eyJ')) {
+        return stored;
+      }
+    }
   }
+
+  return null;
 }
 
 /**
@@ -171,6 +189,9 @@ export function getStoredTokens(): StoredTokens | null {
  */
 export function clearTokens(): void {
   localStorage.removeItem(TOKEN_STORAGE_KEY);
+  for (const key of LEGACY_TOKEN_STORAGE_KEYS) {
+    localStorage.removeItem(key);
+  }
 }
 
 /**
