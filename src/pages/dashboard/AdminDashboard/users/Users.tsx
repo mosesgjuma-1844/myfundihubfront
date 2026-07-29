@@ -82,7 +82,7 @@ const Users: React.FC = () => {
     setModalError('');
 
     try {
-      const data = await apiGet<{ ok: boolean; user: UserProfile }>(`/user/?id=${user.id}`);
+      const data = await apiGet<{ ok: boolean; user: UserProfile }>(`/user?id=${user.id}`);
       const loadedUser: AdminUser = {
         ...data.user,
         status: user.status,
@@ -131,7 +131,7 @@ const Users: React.FC = () => {
 
     try {
       const data = await apiPut<{ ok: boolean; user: UserProfile }>(
-        `/user/?id=${selectedUser.id}`,
+        `/user?id=${selectedUser.id}`,
         {
           firstName: editForm.firstName,
           lastName: editForm.lastName,
@@ -167,7 +167,7 @@ const Users: React.FC = () => {
     setActionMessage('');
 
     try {
-      const data = await apiPut<{ ok: boolean; user: UserProfile }>(`/user/?id=${userId}`, {
+      const data = await apiPut<{ ok: boolean; user: UserProfile }>(`/user?id=${userId}`, {
         status: nextStatus,
       });
 
