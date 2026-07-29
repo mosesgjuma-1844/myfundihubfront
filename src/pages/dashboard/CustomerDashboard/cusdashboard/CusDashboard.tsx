@@ -95,10 +95,6 @@ const CusDashboard: React.FC = () => {
   const pastBookings = bookings.filter((booking) => booking.status === 'completed' || booking.status === 'cancelled');
 
   const computedStats = useMemo(() => {
-    if (!bookings.length) {
-      return stats;
-    }
-
     const total = bookings.length;
     const active = activeBookings.length;
     const completed = bookings.filter((booking) => booking.status === 'completed').length;
