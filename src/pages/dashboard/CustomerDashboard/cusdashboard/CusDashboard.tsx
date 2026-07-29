@@ -1,5 +1,5 @@
 // cusdashboard/Dashboard.tsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CusDashboard.css';
 import { apiGet, type BookingSummary } from '../../../../utils/api';
@@ -94,6 +94,25 @@ const CusDashboard: React.FC = () => {
   const activeBookings = bookings.filter((booking) => booking.status !== 'completed' && booking.status !== 'cancelled');
   const pastBookings = bookings.filter((booking) => booking.status === 'completed' || booking.status === 'cancelled');
 
+  const computedStats = useMemo(() => {
+    if (!bookings.length) {
+      return stats;
+    }
+
+    const total = bookings.length;
+    const active = activeBookings.length;
+    const completed = bookings.filter((booking) => booking.status === 'completed').length;
+    const cancelled = bookings.filter((booking) => booking.status === 'cancelled').length;
+
+    return [
+      { label: 'Total Bookings', value: `${total}` },
+      { label: 'Active Now', value: `${active}` },
+      { label: 'Completed', value: `${completed}` },
+      { label: 'Cancelled', value: `${cancelled}` },
+      ...stats.filter((stat) => !['Total Bookings', 'Active Now', 'Completed', 'Cancelled'].includes(stat.label)),
+    ];
+  }, [bookings, activeBookings.length, stats]);
+
   const greetingText = () => {
     const hour = new Date().getHours();
     if (hour < 12) return 'Good morning';
@@ -111,7 +130,7 @@ const CusDashboard: React.FC = () => {
         </div>
         <div className="hero-highlight">
           <span className="hero-badge">Live updates</span>
-          <p className="hero-highlight-text">{bookings.length} service request{bookings.length === 1 ? '' : 's'} tracked so far.</p>
+          <p className="hero-highlight-text">{bookings.length} of your service request{bookings.length === 1 ? '' : 's'} tracked so far.</p>
           <button type="button" className="hero-cta-btn" onClick={() => navigate('/customer-dashboard/book-service')}>
             Book Service
           </button>
@@ -119,7 +138,7 @@ const CusDashboard: React.FC = () => {
       </div>
 
       <div className="stats-grid">
-        {stats.map((stat, index) => (
+        {computedStats.map((stat, index) => (
           <div key={index} className="stat-card">
             <div className="stat-content">
               <span className="stat-value">{stat.value}</span>

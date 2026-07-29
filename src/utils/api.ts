@@ -174,6 +174,38 @@ export async function apiPost<T>(path: string, payload: unknown, includeAuth = t
   }
 }
 
+export async function apiPut<T>(path: string, payload: unknown, includeAuth = true): Promise<T> {
+  try {
+    const response = await fetch(`${APIDomain}${path}`, {
+      method: 'PUT',
+      headers: buildHeaders(includeAuth),
+      body: JSON.stringify(payload),
+      credentials: 'include',
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      handleErrorResponse(response, data);
+    }
+
+    if (!data.ok) {
+      throw new APIError(response.status, data.message || 'API request failed');
+    }
+
+    if (data.tokens) {
+      storeTokens(data.tokens);
+    }
+
+    return data as T;
+  } catch (error) {
+    if (error instanceof APIError) {
+      throw error;
+    }
+    throw new APIError(0, error instanceof Error ? error.message : 'Network error');
+  }
+}
+
 /**
  * Login request - special handling for token storage
  */
