@@ -47,12 +47,7 @@ const Users: React.FC = () => {
       setError('');
 
       try {
-        const data = await apiGet<{ users: AdminUser[] }>('/users/');
-        setUsers(data.users || []);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Unable to load users.');
-      } finally {
-        setLoading(false);
+          const data = await apiGet<{ users: AdminUser[] }>('/admin/users/');
       }
     };
 

@@ -119,13 +119,18 @@ export async function apiGet<T>(path: string, includeAuth = true): Promise<T> {
       credentials: 'include',
     });
 
-    const data = await response.json();
+    let data: any = null;
+    try {
+      data = await response.json();
+    } catch {
+      data = null;
+    }
 
     if (!response.ok) {
       handleErrorResponse(response, data);
     }
 
-    if (!data.ok) {
+    if (data && !data.ok) {
       throw new APIError(response.status, data.message || 'API request failed');
     }
 
