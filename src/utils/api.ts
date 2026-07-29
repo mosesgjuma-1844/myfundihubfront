@@ -122,7 +122,7 @@ export async function apiGet<T>(path: string, includeAuth = true): Promise<T> {
     let data: any = null;
     try {
       data = await response.json();
-    } catch {
+    } catch (parseError) {
       data = null;
     }
 
