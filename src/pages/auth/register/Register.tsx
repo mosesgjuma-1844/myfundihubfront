@@ -164,7 +164,7 @@ const Register: React.FC<RegisterProps> = ({ defaultRole }) => {
           </div>
           {defaultRole === 'admin' && (
             <div className="admin-notice">
-              <p>Admin registration is enabled on this hidden URL.</p>
+              <p>welcome</p>
             </div>
           )}
 
