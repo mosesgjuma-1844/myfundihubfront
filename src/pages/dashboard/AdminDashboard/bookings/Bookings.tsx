@@ -184,43 +184,62 @@ const Bookings: React.FC = () => {
             <table className="bookings-table" role="table">
               <thead>
                 <tr>
-                  <th>ID</th>
-                  <th>Customer</th>
-                  <th>Service</th>
-                  <th>Status</th>
-                  <th>Assign To</th>
-                  <th>Fundi</th>
-                  <th>Amount</th>
-                  <th>Actions</th>
+                  <th className="col-id">ID</th>
+                  <th className="col-customer">Customer</th>
+                  <th className="col-phone">Phone</th>
+                  <th className="col-service">Service</th>
+                  <th className="col-location">Town / Estate</th>
+                  <th className="col-landmark">Nearest Landmark</th>
+                  <th className="col-status">Status</th>
+                  <th className="col-assign">Assign To</th>
+                  <th className="col-fundi">Fundi</th>
+                  <th className="col-amount">Amount</th>
+                  <th className="col-actions">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {sortedBookings.map((booking) => {
-                  const currentSelection = assignment[booking.id] ?? booking.assignedTechnician?.id?.toString() ?? '';
+                  const canAssign = booking.canAssignTechnician !== false;
+                  const currentSelection =
+                    assignment[booking.id]?.toString() ??
+                    booking.assignedTechnicianId?.toString() ??
+                    booking.assignedTechnician?.id?.toString() ??
+                    '';
+                  const customerName = booking.customerName || booking.customer?.name || 'Unknown customer';
+                  const customerPhone = booking.customerPhoneNumber || 'Not provided';
+                  const serviceLabel = booking.serviceType || booking.serviceTypeKey || 'Unknown';
+                  const locationLabel = booking.townOrEstate || booking.location || 'Not provided';
+                  const landmarkLabel = booking.landmark || 'Not provided';
+                  const technicianLabel = booking.assignedTechnician?.name || 'Unassigned';
+
                   return (
                     <tr key={booking.id}>
-                      <td>#{booking.id}</td>
-                      <td>{booking.customer?.name || 'Unknown customer'}</td>
-                      <td>{booking.serviceType}</td>
-                      <td><span className={`status-pill ${booking.status}`}>{booking.status}</span></td>
-                      <td>
+                      <td className="col-id">#{booking.id}</td>
+                      <td className="col-customer">{customerName}</td>
+                      <td className="col-phone">{customerPhone}</td>
+                      <td className="col-service">{serviceLabel}</td>
+                      <td className="col-location">{locationLabel}</td>
+                      <td className="col-landmark">{landmarkLabel}</td>
+                      <td className="col-status"><span className={`status-pill ${booking.status}`}>{booking.status}</span></td>
+                      <td className="col-assign">
                         <select
                           value={currentSelection}
                           onChange={(e) => handleSelectionChange(booking.id, e.target.value)}
+                          disabled={!canAssign}
                         >
-                          <option value="">Select technician</option>
+                          <option value="">{canAssign ? 'Select technician' : 'Not available'}</option>
                           {technicians.map((tech) => (
                             <option key={tech.id} value={tech.id.toString()}>{tech.name}</option>
                           ))}
                         </select>
                       </td>
-                      <td>{booking.assignedTechnician?.name || 'Unassigned'}</td>
-                      <td>KSh {booking.estimatedCost?.toLocaleString() || '0'}</td>
-                      <td>
+                      <td className="col-fundi">{technicianLabel}</td>
+                      <td className="col-amount">KSh {booking.estimatedCost?.toLocaleString() || '0'}</td>
+                      <td className="col-actions">
                         <button
                           className="assign-btn"
                           onClick={() => handleAssign(booking.id)}
-                          disabled={!currentSelection || String(booking.assignedTechnician?.id) === currentSelection}
+                          disabled={!canAssign || !currentSelection || String(booking.assignedTechnician?.id) === currentSelection}
                         >
                           {booking.assignedTechnician ? 'Reassign' : 'Assign'}
                         </button>

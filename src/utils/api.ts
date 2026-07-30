@@ -24,6 +24,7 @@ export type UserProfile = {
 export type BookingSummary = {
   id: number;
   serviceType: string;
+  serviceTypeKey?: string | null;
   location: string;
   county: string;
   townOrEstate: string;
@@ -38,6 +39,10 @@ export type BookingSummary = {
   estimatedCost: number;
   calloutFee?: number | null;
   callout_fee?: number | null;
+  customerName?: string | null;
+  customerPhoneNumber?: string | null;
+  canAssignTechnician?: boolean;
+  assignedTechnicianId?: number | null;
   customer: {
     id: number;
     name: string;
