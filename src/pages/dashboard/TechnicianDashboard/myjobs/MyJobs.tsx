@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { MapContainer, Marker, TileLayer } from 'react-leaflet';
 import type { LatLngExpression } from 'leaflet';
 import { apiGet } from '../../../../utils/api';
+import { getAccessToken } from '../../../../utils/tokenManager';
 import 'leaflet/dist/leaflet.css';
 import './MyJobs.css';
 
@@ -36,11 +37,26 @@ type BookingSummary = {
   scheduledDate: string | null;
   scheduledTime: string | null;
   estimatedCost: number;
+  assignedTechnicianId?: number | null;
+  assignedTechnician?: {
+    id: number;
+    name: string;
+  } | null;
   customer: {
     id: number;
     name: string;
   } | null;
 };
+
+function parseTechnicianId(token: string): number | null {
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1] || ''));
+    const candidate = payload.user_id ?? payload.id ?? payload.sub ?? null;
+    return typeof candidate === 'number' ? candidate : null;
+  } catch {
+    return null;
+  }
+}
 
 const MyJobs: React.FC = () => {
   const [activeTab, setActiveTab] = useState('active');
@@ -56,7 +72,19 @@ const MyJobs: React.FC = () => {
       setError('');
       try {
         const data = await apiGet<{ bookings: BookingSummary[] }>('/bookings/');
-        setJobs(data.bookings || []);
+        const technicianToken = getAccessToken();
+        const currentTechnicianId = technicianToken ? parseTechnicianId(technicianToken) : null;
+
+        const assignedJobs = (data.bookings || []).filter((booking) => {
+          if (currentTechnicianId === null) {
+            return false;
+          }
+
+          const assignedId = booking.assignedTechnicianId ?? booking.assignedTechnician?.id;
+          return assignedId === currentTechnicianId;
+        });
+
+        setJobs(assignedJobs);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unable to load your jobs.');
       } finally {
@@ -110,7 +138,7 @@ const MyJobs: React.FC = () => {
           <div className="empty-state">
             <span className="empty-icon">📋</span>
             <p className="empty-text">No jobs in this category</p>
-            <p className="empty-subtext">Assigned jobs will appear here</p>
+            <p className="empty-subtext">Jobs assigned to you will appear here</p>
           </div>
         ) : (
           visibleJobs.map((job) => {
