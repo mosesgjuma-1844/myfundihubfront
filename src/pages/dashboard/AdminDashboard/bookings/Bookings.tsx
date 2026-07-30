@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { apiGet, apiPost, type BookingSummary } from '../../../../utils/api';
 import './Bookings.css';
 
@@ -17,26 +17,51 @@ const Bookings: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState('');
   const [serviceFilter, setServiceFilter] = useState('');
   const [technicianFilter, setTechnicianFilter] = useState('');
+  const [dateFilter, setDateFilter] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [assignment, setAssignment] = useState<Record<number, string>>({});
+  const [hiddenColumns, setHiddenColumns] = useState<string[]>([]);
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+
+  const columnOptions = useMemo(
+    () => [
+      { key: 'customer', label: 'Customer' },
+      { key: 'phone', label: 'Phone' },
+      { key: 'service', label: 'Service' },
+      { key: 'location', label: 'Town / Estate' },
+      { key: 'landmark', label: 'Nearest Landmark' },
+      { key: 'status', label: 'Status' },
+      { key: 'assign', label: 'Assign To' },
+      { key: 'fundi', label: 'Fundi' },
+      { key: 'amount', label: 'Amount' },
+      { key: 'actions', label: 'Actions' },
+    ],
+    []
+  );
 
   const sortedBookings = useMemo(() => {
     return [...bookings].sort((a, b) => {
-      const aHas = Boolean(a.scheduledDate);
-      const bHas = Boolean(b.scheduledDate);
-      if (!aHas && !bHas) return b.id - a.id;
-      if (!aHas) return 1;
-      if (!bHas) return -1;
+      const getTimestamp = (booking: BookingSummary) => {
+        if (booking.createdAt) {
+          return new Date(booking.createdAt).getTime();
+        }
 
-      const aTime = `${a.scheduledDate}T${a.scheduledTime ?? '00:00:00'}`;
-      const bTime = `${b.scheduledDate}T${b.scheduledTime ?? '00:00:00'}`;
-      const at = new Date(aTime).getTime();
-      const bt = new Date(bTime).getTime();
-      if (at === bt) return b.id - a.id;
-      return at - bt; // earliest first
+        const datePart = booking.createdAtDate || booking.scheduledDate;
+        if (!datePart) {
+          return Number.NEGATIVE_INFINITY;
+        }
+
+        const timePart = booking.createdAtTime || booking.scheduledTime || '00:00:00';
+        return new Date(`${datePart}T${timePart}`).getTime();
+      };
+
+      const aTime = getTimestamp(a);
+      const bTime = getTimestamp(b);
+      if (aTime === bTime) return b.id - a.id;
+      return aTime - bTime;
     });
   }, [bookings]);
 
@@ -45,9 +70,17 @@ const Bookings: React.FC = () => {
     if (statusFilter) params.set('status', statusFilter);
     if (serviceFilter) params.set('serviceType', serviceFilter);
     if (technicianFilter) params.set('technicianId', technicianFilter);
+    if (dateFilter) params.set('date', dateFilter);
     if (searchTerm) params.set('search', searchTerm);
     return params.toString();
-  }, [statusFilter, serviceFilter, technicianFilter, searchTerm]);
+  }, [statusFilter, serviceFilter, technicianFilter, dateFilter, searchTerm]);
+
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollLeft = 0;
+      scrollContainerRef.current.scrollTop = 0;
+    }
+  }, [bookings, hiddenColumns]);
 
   useEffect(() => {
     const fetchTechnicians = async () => {
@@ -106,6 +139,14 @@ const Bookings: React.FC = () => {
     setAssignment((current) => ({ ...current, [bookingId]: value }));
   };
 
+  const toggleColumn = (columnKey: string) => {
+    setHiddenColumns((current) =>
+      current.includes(columnKey) ? current.filter((key) => key !== columnKey) : [...current, columnKey]
+    );
+  };
+
+  const isColumnHidden = (columnKey: string) => hiddenColumns.includes(columnKey);
+
   return (
     <div className="bookings-page">
       <div className="page-header">
@@ -154,6 +195,17 @@ const Bookings: React.FC = () => {
           </select>
         </div>
 
+        <div className="filter-group">
+          <label htmlFor="dateFilter">Application Date</label>
+          <input
+            id="dateFilter"
+            name="dateFilter"
+            type="date"
+            value={dateFilter}
+            onChange={(e) => setDateFilter(e.target.value)}
+          />
+        </div>
+
         <div className="filter-group search-group">
           <label htmlFor="searchTerm">Search</label>
           <input
@@ -167,8 +219,21 @@ const Bookings: React.FC = () => {
         </div>
       </div>
 
+      <div className="column-toggle-bar" role="toolbar" aria-label="Show or hide columns">
+        {columnOptions.map((column) => (
+          <label key={column.key} className="column-toggle-option">
+            <input
+              type="checkbox"
+              checked={!hiddenColumns.includes(column.key)}
+              onChange={() => toggleColumn(column.key)}
+            />
+            <span>{column.label}</span>
+          </label>
+        ))}
+      </div>
+
       <div className="bookings-table-wrapper">
-        <div className="bookings-table-scroll">
+        <div className="bookings-table-scroll" ref={scrollContainerRef}>
           {loading ? (
             <div className="empty-state">
               <span className="empty-icon">⏳</span>
@@ -185,16 +250,17 @@ const Bookings: React.FC = () => {
               <thead>
                 <tr>
                   <th className="col-id">ID</th>
-                  <th className="col-customer">Customer</th>
-                  <th className="col-phone">Phone</th>
-                  <th className="col-service">Service</th>
-                  <th className="col-location">Town / Estate</th>
-                  <th className="col-landmark">Nearest Landmark</th>
-                  <th className="col-status">Status</th>
-                  <th className="col-assign">Assign To</th>
-                  <th className="col-fundi">Fundi</th>
-                  <th className="col-amount">Amount</th>
-                  <th className="col-actions">Actions</th>
+                  {!isColumnHidden('customer') && <th className="col-customer">Customer</th>}
+                  {!isColumnHidden('phone') && <th className="col-phone">Phone</th>}
+                  {!isColumnHidden('service') && <th className="col-service">Service</th>}
+                  {!isColumnHidden('location') && <th className="col-location">Town / Estate</th>}
+                  {!isColumnHidden('application') && <th className="col-application">Applied On</th>}
+                  {!isColumnHidden('landmark') && <th className="col-landmark">Nearest Landmark</th>}
+                  {!isColumnHidden('status') && <th className="col-status">Status</th>}
+                  {!isColumnHidden('assign') && <th className="col-assign">Assign To</th>}
+                  {!isColumnHidden('fundi') && <th className="col-fundi">Fundi</th>}
+                  {!isColumnHidden('amount') && <th className="col-amount">Amount</th>}
+                  {!isColumnHidden('actions') && <th className="col-actions">Actions</th>}
                 </tr>
               </thead>
               <tbody>
@@ -206,22 +272,25 @@ const Bookings: React.FC = () => {
                     booking.assignedTechnician?.id?.toString() ??
                     '';
                   const customerName = booking.customerName || booking.customer?.name || 'Unknown customer';
-                  const customerPhone = booking.customerPhoneNumber || 'Not provided';
+                  const customerPhone = booking.customerPhoneNumber || booking.customer?.phoneNumber || 'Not provided';
                   const serviceLabel = booking.serviceType || booking.serviceTypeKey || 'Unknown';
                   const locationLabel = booking.townOrEstate || booking.location || 'Not provided';
+                  const applicationDate = booking.createdAtDate || booking.createdAt?.split('T')[0] || booking.scheduledDate || 'Not set';
+                  const applicationTime = booking.createdAtTime || booking.createdAt?.split('T')[1]?.slice(0, 5) || booking.scheduledTime || 'Not set';
                   const landmarkLabel = booking.landmark || 'Not provided';
                   const technicianLabel = booking.assignedTechnician?.name || 'Unassigned';
 
                   return (
                     <tr key={booking.id}>
                       <td className="col-id">#{booking.id}</td>
-                      <td className="col-customer">{customerName}</td>
-                      <td className="col-phone">{customerPhone}</td>
-                      <td className="col-service">{serviceLabel}</td>
-                      <td className="col-location">{locationLabel}</td>
-                      <td className="col-landmark">{landmarkLabel}</td>
-                      <td className="col-status"><span className={`status-pill ${booking.status}`}>{booking.status}</span></td>
-                      <td className="col-assign">
+                      {!isColumnHidden('customer') && <td className="col-customer">{customerName}</td>}
+                      {!isColumnHidden('phone') && <td className="col-phone">{customerPhone}</td>}
+                      {!isColumnHidden('service') && <td className="col-service">{serviceLabel}</td>}
+                      {!isColumnHidden('location') && <td className="col-location">{locationLabel}</td>}
+                      {!isColumnHidden('application') && <td className="col-application"><div>{applicationDate}</div><div className="application-time">{applicationTime}</div></td>}
+                      {!isColumnHidden('landmark') && <td className="col-landmark">{landmarkLabel}</td>}
+                      {!isColumnHidden('status') && <td className="col-status"><span className="status-text">{booking.status}</span></td>}
+                      {!isColumnHidden('assign') && <td className="col-assign">
                         <select
                           value={currentSelection}
                           onChange={(e) => handleSelectionChange(booking.id, e.target.value)}
@@ -232,10 +301,10 @@ const Bookings: React.FC = () => {
                             <option key={tech.id} value={tech.id.toString()}>{tech.name}</option>
                           ))}
                         </select>
-                      </td>
-                      <td className="col-fundi">{technicianLabel}</td>
-                      <td className="col-amount">KSh {booking.estimatedCost?.toLocaleString() || '0'}</td>
-                      <td className="col-actions">
+                      </td>}
+                      {!isColumnHidden('fundi') && <td className="col-fundi">{technicianLabel}</td>}
+                      {!isColumnHidden('amount') && <td className="col-amount">KSh {booking.estimatedCost?.toLocaleString() || '0'}</td>}
+                      {!isColumnHidden('actions') && <td className="col-actions">
                         <button
                           className="assign-btn"
                           onClick={() => handleAssign(booking.id)}
@@ -243,7 +312,7 @@ const Bookings: React.FC = () => {
                         >
                           {booking.assignedTechnician ? 'Reassign' : 'Assign'}
                         </button>
-                      </td>
+                      </td>}
                     </tr>
                   );
                 })}

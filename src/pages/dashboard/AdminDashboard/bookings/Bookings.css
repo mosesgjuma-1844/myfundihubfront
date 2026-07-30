@@ -35,11 +35,34 @@
   background: rgba(var(--surface-rgb), 0.05);
 }
 
+.column-toggle-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.column-toggle-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(var(--surface-rgb), 0.04);
+  color: rgba(var(--text-primary-rgb), 0.8);
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.column-toggle-option input {
+  accent-color: #e08a0e;
+}
+
 .bookings-table-wrapper {
   background: rgba(var(--surface-rgb), 0.02);
   border: 1px solid rgba(var(--border-rgb), 0.06);
   border-radius: 16px;
-  overflow: visible; /* allow inner table to scroll horizontally */
+  overflow: visible;
 }
 
 /* Filter bar: lay filters out horizontally */
@@ -75,12 +98,19 @@
   border-radius: 8px;
   border: 1px solid rgba(var(--border-rgb), 0.06);
   background: rgba(var(--surface-rgb), 0.02);
+  color: rgba(var(--text-primary-rgb), 0.9);
+}
+
+.bookings-filters input[type="search"]::placeholder {
+  color: rgba(var(--text-primary-rgb), 0.55);
 }
 
 .bookings-table-scroll {
   width: 100%;
   overflow-x: auto;
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  scrollbar-gutter: stable both-edges;
 }
 
 .bookings-table {
@@ -89,6 +119,7 @@
   min-width: 1280px;
   table-layout: fixed;
   font-size: 12px;
+  color: rgba(var(--text-primary-rgb), 0.9);
 }
 
 .bookings-table thead th {
@@ -112,6 +143,7 @@
   overflow-wrap: anywhere;
   word-break: break-word;
   line-height: 1.4;
+  color: rgba(var(--text-primary-rgb), 0.9);
 }
 
 .col-id { width: 56px; }
@@ -119,6 +151,7 @@
 .col-phone { width: 108px; }
 .col-service { width: 120px; }
 .col-location { width: 140px; }
+.col-application { width: 140px; }
 .col-landmark { width: 170px; }
 .col-status { width: 88px; }
 .col-assign { width: 150px; }
@@ -130,13 +163,18 @@
   background: rgba(var(--surface-rgb), 0.01);
 }
 
-.status-pill {
+.status-text {
   display: inline-block;
-  padding: 6px 10px;
-  border-radius: 999px;
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 500;
   text-transform: capitalize;
+  color: rgba(var(--text-primary-rgb), 0.9);
+}
+
+.application-time {
+  font-size: 11px;
+  color: rgba(var(--text-primary-rgb), 0.6);
+  margin-top: 2px;
 }
 
 .bookings-table select {
@@ -146,6 +184,7 @@
   border-radius: 8px;
   border: 1px solid rgba(var(--border-rgb), 0.06);
   background: rgba(var(--surface-rgb), 0.02);
+  color: rgba(var(--text-primary-rgb), 0.9);
   font-size: 12px;
 }
 
@@ -190,6 +229,9 @@
 }
 
 @media (max-width: 1024px) {
+  .column-toggle-bar {
+    gap: 6px;
+  }
   .bookings-table {
     min-width: 1180px;
     font-size: 11px;

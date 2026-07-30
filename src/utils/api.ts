@@ -34,6 +34,9 @@ export type BookingSummary = {
   description: string;
   scheduledDate: string | null;
   scheduledTime: string | null;
+  createdAt?: string | null;
+  createdAtDate?: string | null;
+  createdAtTime?: string | null;
   serviceWindow: string;
   status: string;
   estimatedCost: number;
@@ -46,6 +49,7 @@ export type BookingSummary = {
   customer: {
     id: number;
     name: string;
+    phoneNumber?: string | null;
   } | null;
   assignedTechnician: {
     id: number;
